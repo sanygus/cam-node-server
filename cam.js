@@ -5,7 +5,7 @@ var Camera = require("camerapi");//https://www.npmjs.com/package/camerapi
 var dateformat = require('dateformat');
 var exec = require('child_process');
 
-var socket = new WebSocket("ws://hubsolar.cloudapp.net:8082");
+var socket = new WebSocket("ws://192.168.0.0:2929");
 var socketopened = false;
 var binarytrans = false;
 
