@@ -1,3 +1,5 @@
+var sensorsdata='{}';
+
 function FileServer(){
 
 	var WebSocket = require('ws').Server;
@@ -21,6 +23,9 @@ function FileServer(){
 						sendfilemode = true;
 						filename = datajson.filename;
 						console.log('file receive start');	
+						break;
+					case 'sensors':
+						sensorsdata = datajson.data;
 						break;
 					default:
 						console.log('undefined type');
@@ -47,3 +52,4 @@ function FileServer(){
 };
 
 module.exports = FileServer;
+module.exports.sensorsdata = function(){return sensorsdata;}

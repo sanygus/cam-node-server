@@ -1,4 +1,5 @@
 function WebServer(){
+	
 	var filesdir = 'files';
 
 	var fs = require('fs');
@@ -16,7 +17,9 @@ function WebServer(){
 				});
 				
 			}, function(err,myfiles){
-				result.render('index',{title:'mytitle',text:'Files:',files:myfiles});
+				var sensorsdata = JSON.parse(require('./fileserver.js').sensorsdata());
+				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata});
+				console.log(sensorsdata);
 			});
 		});
 	});
