@@ -1,4 +1,5 @@
-var sensorsdata='{}';
+//TODO: from file!
+var sensorsdata=[];//массив объектов
 
 function FileServer(){
 
@@ -25,7 +26,8 @@ function FileServer(){
 						console.log('file receive start');	
 						break;
 					case 'sensors':
-						sensorsdata = datajson.data;
+						sensorsdata = sensorsdata.concat(JSON.parse(datajson.data));
+						console.log(sensorsdata);
 						break;
 					default:
 						console.log('undefined type');

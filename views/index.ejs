@@ -7,14 +7,17 @@
 		<b><%= text %></b><br>
 		<ul>
 			<% files.forEach(function(file){ %>
-				<li>
-					<a href="imgs/<%= file.name %>"><%= file.name %></a> (<%= file.size %> Kb)
-				</li>
+			<li>
+				<a href="imgs/<%= file.name %>"><%= file.name %></a> (<%= file.size %> Kb)
+			</li>
 			<% }); %>
 		</ul>
 		<br><br><br>
 		<b>Values:</b><br>
-			<b>CPU temp</b>: <%= sd.cputemp %><br>
-			<b>Ping</b>: <%= sd.pingtime %>
+			<% sd.forEach(function(values){ %>
+			<b>Date</b>: <%= values.date %><br>
+			<b>CPU temp</b>: <%= values.cputemp %><br>
+			<b>Ping</b>: <%= values.pingtime %><br><br>
+			<% }); %>
 	</body>
 </html>

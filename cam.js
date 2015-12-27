@@ -28,11 +28,12 @@ function sendfile(fname){
 
 function sendsensorsdata(){
 	/*TODO: saving data*/
+	var date = dateformat(new Date(),'isoDateTime').replace('+0300','');
 	var cputemp = exec.execSync('/opt/vc/bin/vcgencmd measure_temp').toString().substring(5,11);
 	var pingt = exec.execSync('ping -c 1 -w 1 8.8.8.9;exit 0').toString().substring(91,98);
 	if (pingt=='nsmitte'){pingt=null;}
 
-	var data = '{\\"cputemp\\":\\"'+cputemp+'\\",\\"pingtime\\":\\"'+pingt+'\\"}';//temp
+	var data = '{\\"date\\":\\"'+date+'\\",\\"cputemp\\":\\"'+cputemp+'\\",\\"pingtime\\":\\"'+pingt+'\\"}';//temp
 	 
 	
 

@@ -17,7 +17,7 @@ function WebServer(){
 				});
 				
 			}, function(err,myfiles){
-				var sensorsdata = JSON.parse(require('./fileserver.js').sensorsdata());
+				var sensorsdata = require('./fileserver.js').sensorsdata();
 				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata});
 				console.log(sensorsdata);
 			});
