@@ -23,7 +23,7 @@ function FileServer(){
 					case 'sendfile':
 						sendfilemode = true;
 						filename = datajson.filename;
-						console.log('file receive start');	
+						console.log('file receive '+filename+' start');	
 						break;
 					case 'sensors':
 						sensorsdata = sensorsdata.concat(JSON.parse(datajson.data));
