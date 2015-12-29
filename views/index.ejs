@@ -13,6 +13,9 @@
 			<% }); %>
 		</ul>
 		<br><br><br>
+		CPU:<div id="graph_cput"></div>
+		Ping:<div id="graph_ping"></div>
+		<br><br><br>
 		<b>Values:</b><br>
 			<% sd.forEach(function(values){ %>
 			<b>Date</b>: <%= values.date %><br>
@@ -20,4 +23,55 @@
 			<b>Ping</b>: <%= values.pingtime %><br><br>
 			<% }); %>
 	</body>
+	<script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+
+    <script type="text/javascript">
+      google.setOnLoadCallback(draw);
+
+      function draw() {
+        //--------CPUT---------
+        var datacput = google.visualization.arrayToDataTable([
+          ['Time', 'CPU temp'],
+          <% sd.forEach(function(values){ %>
+          ['<%= values.date.substr(11) %>',  <%= values.cputemp.replace('\'C','') %>],
+          <% }); %>
+        ]);
+
+        var optionscput = {
+          title: 'CPU temperature',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var graphcput = new google.visualization.LineChart(document.getElementById('graph_cput'));
+        graphcput.draw(datacput,optionscput);
+
+        //--------PING---------
+        var dataping = google.visualization.arrayToDataTable([
+          ['Time', 'Ping'],
+          <% sd.forEach(function(values){ %>
+          ['<%= values.date.substr(11) %>',  <%= values.pingtime.replace(' ms','') %>],
+          <% }); %>
+        ]);
+
+        var optionsping = {
+          title: 'Ping time to 8.8.8.8',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var graphping = new google.visualization.LineChart(document.getElementById('graph_ping'));
+        graphping.draw(dataping,optionsping);
+
+
+        
+      }
+    </script>
 </html>
