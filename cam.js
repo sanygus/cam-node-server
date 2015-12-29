@@ -9,7 +9,7 @@ var socket = new WebSocket("ws://192.168.0.122:2929");
 var socketopened = false;
 var binarytrans = false;
 var texttrans = false;
-var sensorsvalues = [];//массив строк
+var sensorsvalues = [];//array of str
 var sensorsdatafile = '/tmp/sensors.data';
 fs.exists(sensorsdatafile, function(exist){
 	if(exist){
@@ -24,6 +24,7 @@ fs.exists(sensorsdatafile, function(exist){
 
 
 function sendfile(fname){
+	//TODO: no send incomplete pict
 	if(socketopened && !binarytrans && !texttrans){
 		fs.readFile(fname, function(er,data){
 			var fnameshort = fname.substring(fname.lastIndexOf('/')+1);
@@ -121,7 +122,7 @@ socket.on('error', function(){
 	socketopened = false;
 	var binarytrans = false;
 	var texttrans = false;
-	//reconnect
+	//TODO:reconnect
 });
 
 

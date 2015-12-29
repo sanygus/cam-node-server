@@ -1,5 +1,5 @@
 //TODO: from file!
-var sensorsdata=[];//массив объектов
+var sensorsdata=[];//array of objs
 
 function FileServer(){
 
