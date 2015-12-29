@@ -112,11 +112,15 @@ socket.on('open', function(){
 socket.on('close', function(){
 	console.log('disconnected from server');
 	socketopened = false;
+	var binarytrans = false;
+	var texttrans = false;
 });
 
 socket.on('error', function(){
 	console.log('connecting error');
 	socketopened = false;
+	var binarytrans = false;
+	var texttrans = false;
 	//reconnect
 });
 
