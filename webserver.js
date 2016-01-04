@@ -18,8 +18,8 @@ function WebServer(){
 				
 			}, function(err,myfiles){
 				var sensorsdata = require('./fileserver.js').sensorsdata();
-				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata});
-				console.log(sensorsdata);
+				var statistics = require('./fileserver.js').statistics();
+				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata,statistics:statistics});
 			});
 		});
 	});

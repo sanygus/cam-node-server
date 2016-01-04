@@ -12,6 +12,16 @@
 			</li>
 			<% }); %>
 		</ul>
+    <br><br><br>
+      <b>Statistics (received)</b><br>
+      <ul>
+        <li>All KBytes: <%= (statistics.allbytes/1024).toFixed(1) %> KB</li>
+        <li>All time (trasnfer): <%= statistics.alltime %> sec</li>
+        <li>Count files: <%= statistics.countfiles %></li>
+        <li>Count sensor values: <%= statistics.countsensors %></li>
+        <li>Speed (last): <%= (statistics.speed.last/1024).toFixed(1) %> KB/sec</li>
+        <li>Speed (avg): <%= (statistics.speed.avg/1024).toFixed(1) %> KB/sec</li>
+      </ul>
 		<br><br><br>
 		CPU:<div id="graph_cput"></div>
 		Ping:<div id="graph_ping"></div>

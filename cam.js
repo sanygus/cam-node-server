@@ -9,7 +9,7 @@ var socket = new WebSocket("ws://192.168.0.122:2929");
 var socketopened = false;
 var binarytrans = false;
 var texttrans = false;
-var sensorsvalues = [];//array of str
+var sensorsvalues = [];//массив строк
 var sensorsdatafile = '/tmp/sensors.data';
 fs.exists(sensorsdatafile, function(exist){
 	if(exist){
@@ -40,13 +40,11 @@ function sendfile(fname){
 				socket.send(data, function(){
 					console.log('file '+fnameshort+' sent!');
 					binarytrans = false;
+
+					//----можно вынести, стоит ли?----
 					fs.readdir(fnamedir,function(err,files){
 						files = files.filter(function(fn){
-							if(/.*\.jpg/.test(fn)){
-								return true;
-							}else{
-								return false;
-							};
+							return /.*\.jpg/.test(fn);
 						}).sort().reverse();
 						fs.unlink(fname,function(){
 								console.log('file '+fnameshort+' deleted!');
@@ -65,6 +63,7 @@ function sendfile(fname){
 							},3000);
 						};
 					});
+					
 				});
 
 			});
@@ -99,7 +98,6 @@ function sendsensorsdata(){
 		console.log('sensors data not sent - socket not opened or busy!');
 		fs.writeFile(sensorsdatafile,sensorsvalues);
 	};
-
 	
 }
 
