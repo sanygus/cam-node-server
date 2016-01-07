@@ -17,7 +17,7 @@ var statistics = {//statistics (received)
 	},
 	update: function(bytes,time) {
 		var diffbytes = bytes - this.allbytes;
-		this.allbytes = bytes;//!BUG!//only for current session
+		this.allbytes = bytes;
 		if(time!=undefined && time > 0){
 			this.alltime += time/1000;//sec
 			this.speed.last = diffbytes/(time/1000);//bytes/sec
