@@ -1,13 +1,19 @@
 //TODO: from file!
 var sensorsdata = [];//array of objs
 var statistics = {//statistics (received)
+	online: false,
+	onlineDate: null,
+	setonline: function(online){
+		this.online = online;
+		this.onlineDate = new Date();
+	},
 	allbytes: 0,
 	alltime: 0,//time of trasfer (sec)
 	countfiles: 0,
 	countsensors: 0,
 	speed: {//bytes/sec
-		last: 0,
-		avg: 0
+		last: null,
+		avg: null
 	},
 	update: function(bytes,time) {
 		var diffbytes = bytes - this.allbytes;
@@ -15,7 +21,7 @@ var statistics = {//statistics (received)
 		if(time!=undefined && time > 0){
 			this.alltime += time/1000;//sec
 			this.speed.last = diffbytes/(time/1000);//bytes/sec
-			this.speed.avg = (this.speed.avg==0) ? this.speed.last : (this.speed.avg + this.speed.last)/2;
+			this.speed.avg = (this.speed.avg==null) ? this.speed.last : (this.speed.avg + this.speed.last)/2;
 		};
 	}
 };
@@ -26,6 +32,8 @@ function FileServer(){
 	var fs = require('fs');
 	var ws = new WebSocket({port:2929});
 
+	var bytesReceivedOld = null;
+
 	ws.on('connection', function(wssocket){
 
 		var sendfilemode = false;
@@ -33,6 +41,10 @@ function FileServer(){
 		var timestart;//?
 		var timeend;//?
 		console.log('connect open');
+		if(bytesReceivedOld != null){
+			wssocket.bytesReceived = bytesReceivedOld;
+		};
+		statistics.setonline(true);
 
 		wssocket.on('message',function(data){
 
@@ -79,7 +91,11 @@ function FileServer(){
 			if(sendfilemode){//?
 				timeend = new Date();
 				statistics.update(wssocket.bytesReceived, timestart - timeend);
+			}else{
+				statistics.update(wssocket.bytesReceived);
 			};
+			statistics.setonline(false);
+			bytesReceivedOld = wssocket.bytesReceived;
 			console.log('connect close');
 			sendfilemode = false;
 			filename = '';

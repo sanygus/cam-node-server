@@ -24,7 +24,7 @@ fs.exists(sensorsdatafile, function(exist){
 
 
 function sendfile(fname){
-	//TODO: no send incomplete pict
+	//TODO: no send incomplete pict//may be OK
 	if(socketopened && !binarytrans && !texttrans){
 		fs.readFile(fname, function(er,data){
 			var fnameshort = fname.substring(fname.lastIndexOf('/')+1);
@@ -44,7 +44,7 @@ function sendfile(fname){
 					//----можно вынести, стоит ли?----
 					fs.readdir(fnamedir,function(err,files){
 						files = files.filter(function(fn){
-							return /.*\.jpg/.test(fn);
+							return /.*\.jpg$/.test(fn);
 						}).sort().reverse();
 						fs.unlink(fname,function(){
 								console.log('file '+fnameshort+' deleted!');
@@ -75,7 +75,7 @@ function sendfile(fname){
 
 function sendsensorsdata(){
 
-	var date = dateformat(new Date(),'isoDateTime').replace('+0300','');
+	var date = dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss');
 	var cputemp = exec.execSync('/opt/vc/bin/vcgencmd measure_temp').toString().substring(5,11);
 	var pingt = exec.execSync('ping -c 1 -w 1 8.8.8.8;exit 0').toString().substring(91,98);
 	/*var cputemp = '37.9\'C';
@@ -132,7 +132,7 @@ setInterval(function(){
 			"width": 2592,
 			"height": 1944,
 			"quality": 100
-		}).takePicture(dateformat(new Date(),'isoDateTime').replace('+0300','')+".jpg",function(file){
+		}).takePicture(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".jpg",function(file){
 			console.log(file);
 			sendfile(file);
 		});

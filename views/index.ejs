@@ -13,10 +13,20 @@
 			<% }); %>
 		</ul>
     <br><br><br>
-      <b>Statistics (received)</b><br>
+      <b>Status: </b>
+      <% if(statistics.online){ %>
+        <font color=green>ONLINE</font>
+      <% }else{ %>
+        <font color=gray>OFFLINE</font>
+      <% }; %>
+      <% if(statistics.onlineDate != null){ %>
+        (since <%= statistics.onlineDate %>)
+      <% } %>
+      <br><br>
+      <b>Statistics (received)</b>
       <ul>
         <li>All KBytes: <%= (statistics.allbytes/1024).toFixed(1) %> KB</li>
-        <li>All time (trasnfer): <%= statistics.alltime %> sec</li>
+        <li>All time (trasnfer): <%= statistics.alltime.toFixed(3) %> sec</li>
         <li>Count files: <%= statistics.countfiles %></li>
         <li>Count sensor values: <%= statistics.countsensors %></li>
         <li>Speed (last): <%= (statistics.speed.last/1024).toFixed(1) %> KB/sec</li>

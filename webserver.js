@@ -5,6 +5,7 @@ function WebServer(){
 	var fs = require('fs');
 	var express = require('express');
 	var async = require('async');
+	var dateformat = require('dateformat');
 
 	var app = express();
 	app.set('view engine','ejs')
@@ -19,6 +20,11 @@ function WebServer(){
 			}, function(err,myfiles){
 				var sensorsdata = require('./fileserver.js').sensorsdata();
 				var statistics = require('./fileserver.js').statistics();
+
+				if(statistics.onlineDate != null){
+					statistics.onlineDate = dateformat(statistics.onlineDate,'yyyy-mm-dd HH:MM:ss');
+				};
+
 				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata,statistics:statistics});
 			});
 		});
