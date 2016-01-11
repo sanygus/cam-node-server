@@ -5,6 +5,7 @@ var Camera = require("camerapi");//https://www.npmjs.com/package/camerapi
 var dateformat = require('dateformat');
 var exec = require('child_process');
 
+
 var socket = new WebSocket("ws://192.168.0.122:2929");
 var socketopened = false;
 var binarytrans = false;
@@ -14,7 +15,7 @@ var sensorsdatafile = '/tmp/sensors.data';
 fs.exists(sensorsdatafile, function(exist){
 	if(exist){
 		fs.readFile(sensorsdatafile, function(err,data){
-			if(data!=''){
+			if(data != ''){
 				sensorsvalues = data.toString().replace(/},{/g,'}*{').split('*');
 			};
 		});
@@ -27,8 +28,8 @@ function sendfile(fname){
 	//TODO: no send incomplete pict//may be OK
 	if(socketopened && !binarytrans && !texttrans){
 		fs.readFile(fname, function(er,data){
-			var fnameshort = fname.substring(fname.lastIndexOf('/')+1);
 			var fnamedir = fname.substring(0,fname.lastIndexOf('/'));
+			var fnameshort = fname.substring(fname.lastIndexOf('/')+1);
 			console.log('fnameshort:'+fnameshort+' fnamedir:'+fnamedir);
 			console.log('sending file "'+fnameshort+'" started...');
 
@@ -40,14 +41,13 @@ function sendfile(fname){
 				socket.send(data, function(){
 					console.log('file '+fnameshort+' sent!');
 					binarytrans = false;
-
-					//----можно вынести, стоит ли?----
 					fs.readdir(fnamedir,function(err,files){
 						files = files.filter(function(fn){
 							return /.*\.jpg$/.test(fn);
+							//TODO: add .h264
 						}).sort().reverse();
 						fs.unlink(fname,function(){
-								console.log('file '+fnameshort+' deleted!');
+							console.log('file '+fnameshort+' deleted!');
 						});
 						console.log(files);
 						if(files.length > 1){//unsent fotos exist
@@ -124,18 +124,38 @@ socket.on('error', function(){
 });
 
 
+
+
 var cam = new Camera();
 cam.baseDirectory("/tmp/cam");
 
-setInterval(function(){
+function takePhoto(){
 	cam.prepare({"timeout": 200,
 			"width": 2592,
 			"height": 1944,
 			"quality": 100
-		}).takePicture(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".jpg",function(file){
+		}).takePicture(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".jpg",function(file,err){
 			console.log(file);
 			sendfile(file);
 		});
+};
+
+function takeVideo(){//https://www.raspberrypi.org/documentation/raspbian/applications/camera.md
+	cam.nopreview()
+	.width(1280)
+	.height(720)
+	.framerate(15)
+	//.bitrate(15000000)//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
+	.timeout(20000)
+	.recordVideo(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".h264",function(file,err){
+			console.log(file);
+			sendfile(file);
+		});
+};
+//takeVideo();
+
+setInterval(function(){//photo or video
+	takePhoto();
 },15000);
 
 setInterval(function(){
