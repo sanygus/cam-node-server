@@ -21,7 +21,21 @@ fs.exists(sensorsdatafile, function(exist){
 		});
 	};
 });
-
+var settings = {
+	photo: {
+		width: 2592,//px
+		height: 1944,//px
+		quality: 100,//%
+		timeout: 200//ms
+	},
+	video: {
+		width: 1280,//px
+		height: 720,//px
+		framerate: 15,//fps
+		bitrate: 15000000,//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
+		time: 20000//ms
+	}
+};
 
 
 function sendfile(fname){
@@ -43,8 +57,7 @@ function sendfile(fname){
 					binarytrans = false;
 					fs.readdir(fnamedir,function(err,files){
 						files = files.filter(function(fn){
-							return /.*\.jpg$/.test(fn);
-							//TODO: add .h264
+							return /.*\.(jpg|h264)$/.test(fn);
 						}).sort().reverse();
 						fs.unlink(fname,function(){
 							console.log('file '+fnameshort+' deleted!');
@@ -105,7 +118,8 @@ function sendsensorsdata(){
 
 socket.on('open', function(){
 	console.log('connected to server');
-	socketopened = true;	
+	socketopened = true;
+	sendSettings();
 });
 
 socket.on('close', function(){
@@ -124,16 +138,29 @@ socket.on('error', function(){
 });
 
 
+//---SETTINGS----
+function sendSettings(){
+	if(socketopened && !binarytrans && !texttrans){
+		texttrans = true;
+		socket.send('{"type":"settings","data":'+JSON.stringify(settings)+'}',function(){
+			texttrans = false;
+			console.log('settings sent');
+		});
+	}else{
+		console.log('settings not sent - socket not opened or busy!');
+	};
+};
 
 
+//---CAMERA----
 var cam = new Camera();
 cam.baseDirectory("/tmp/cam");
 
 function takePhoto(){
-	cam.prepare({"timeout": 200,
-			"width": 2592,
-			"height": 1944,
-			"quality": 100
+	cam.prepare({"timeout": settings.photo.timeout,
+			"width": settings.photo.width,
+			"height": settings.photo.height,
+			"quality": settings.photo.quality
 		}).takePicture(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".jpg",function(file,err){
 			console.log(file);
 			sendfile(file);
@@ -142,11 +169,11 @@ function takePhoto(){
 
 function takeVideo(){//https://www.raspberrypi.org/documentation/raspbian/applications/camera.md
 	cam.nopreview()
-	.width(1280)
-	.height(720)
-	.framerate(15)
-	//.bitrate(15000000)//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
-	.timeout(20000)
+	.width(settings.video.width)
+	.height(settings.video.height)
+	.framerate(settings.video.framerate)
+	//.bitrate(settings.video.bitrate)//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
+	.timeout(settings.video.time)
 	.recordVideo(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".h264",function(file,err){
 			console.log(file);
 			sendfile(file);
@@ -154,6 +181,7 @@ function takeVideo(){//https://www.raspberrypi.org/documentation/raspbian/applic
 };
 //takeVideo();
 
+/*
 setInterval(function(){//photo or video
 	takePhoto();
 },15000);
@@ -161,7 +189,13 @@ setInterval(function(){//photo or video
 setInterval(function(){
 	sendsensorsdata();
 },3000);
-/*
+*/
 
+//---END----
+/*
+TODO:
+-change settings
+-photo and videorec logic
+-save and load settings to/from file
 
 */

@@ -4,6 +4,28 @@
 		<title><%= title %></title>
 	</head>
 	<body>
+    <div style="position:absolute;right:0px;width:50%;">
+      <h2>Settings</h2>
+      <% if(camSettings != null){ %>
+      <div style="width:49%;display:inline-block;vertical-align:top;">
+        <center><b>Photo</b></center><br>
+        width: <%= camSettings.photo.width %><br>
+        height: <%= camSettings.photo.height %><br>
+        quality: <%= camSettings.photo.quality %><br>
+        timeout: <%= camSettings.photo.timeout %><br>
+      </div>
+      <div style="width:50%;display:inline-block;vertical-align:top;">
+        <center><b>Video</b></center><br>
+        width: <%= camSettings.video.width %><br>
+        height: <%= camSettings.video.height %><br>
+        framerate: <%= camSettings.video.framerate %><br>
+        bitrate: <%= camSettings.video.bitrate %><br>
+        time: <%= camSettings.video.time %><br>
+      </div>
+      <% }else{ %>
+      <center>settings are not received yet</center>
+      <% } %>
+    </div>
 		<b><%= text %></b><br>
 		<ul>
 			<% files.forEach(function(file){ %>

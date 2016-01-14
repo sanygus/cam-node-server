@@ -20,12 +20,13 @@ function WebServer(){
 			}, function(err,myfiles){
 				var sensorsdata = require('./fileserver.js').sensorsdata();
 				var statistics = require('./fileserver.js').statistics();
+				var camSettings = require('./fileserver.js').camSettings();
 
 				if(statistics.onlineDate != null){
 					statistics.onlineDate = dateformat(statistics.onlineDate,'yyyy-mm-dd HH:MM:ss');
 				};
 
-				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata,statistics:statistics});
+				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata,statistics:statistics,camSettings:camSettings});
 			});
 		});
 	});

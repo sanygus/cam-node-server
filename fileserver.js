@@ -25,6 +25,7 @@ var statistics = {//statistics (received)
 		};
 	}
 };
+var camSettings = null;
 
 function FileServer(){
 
@@ -67,6 +68,11 @@ function FileServer(){
 						//console.log(sensorsdata);
 						statistics.countsensors += newsensorsdata.length;
 						break;
+					case 'settings':
+						camSettings = datajson.data;
+						console.log('get settings');
+						console.log(camSettings);
+						break;
 					default:
 						console.log('undefined type');
 
@@ -107,3 +113,4 @@ function FileServer(){
 module.exports = FileServer;
 module.exports.sensorsdata = function(){return sensorsdata;}
 module.exports.statistics = function(){return statistics;}
+module.exports.camSettings = function(){return camSettings;}
