@@ -21,21 +21,8 @@ fs.exists(sensorsdatafile, function(exist){
 		});
 	};
 });
-var settings = {
-	photo: {
-		width: 2592,//px
-		height: 1944,//px
-		quality: 100,//%
-		timeout: 200//ms
-	},
-	video: {
-		width: 1280,//px
-		height: 720,//px
-		framerate: 15,//fps
-		bitrate: 15000000,//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
-		time: 20000//ms
-	}
-};
+var settingsfile = '/tmp/settings.data';
+var settings;
 
 
 function sendfile(fname){
@@ -119,7 +106,7 @@ function sendsensorsdata(){
 socket.on('open', function(){
 	console.log('connected to server');
 	socketopened = true;
-	sendSettings();
+	sendSettings();//2
 });
 
 socket.on('close', function(){
@@ -139,15 +126,61 @@ socket.on('error', function(){
 
 
 //---SETTINGS----
+getSettings().then(function(result){//переписать
+	settings = result;
+	fs.writeFile(settingsfile, JSON.stringify(result));
+	console.log(settings);
+	sendSettings();//2
+});
+
+function getSettings(){//file or default
+
+	var defaultSettings = {
+		photo: {
+			width: 2592,//px
+			height: 1944,//px
+			quality: 100,//%
+			timeout: 200//ms
+		},
+		video: {
+			width: 1280,//px
+			height: 720,//px
+			framerate: 15,//fps
+			bitrate: 15000000,//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
+			time: 20000//ms
+		}
+	};
+
+	return new Promise(function(resolve){
+		fs.exists(settingsfile, function(exist){
+			if(exist){
+				fs.readFile(settingsfile, function(err,data){
+					if(data != ''){
+						resolve(JSON.parse(data));
+						console.log('settings loaded from file');
+					}else{
+						resolve(defaultSettings);
+						console.log('data is empty');
+					};
+				});
+			}else{
+				resolve(defaultSettings);
+				console.log('file not exist');
+			};
+		});
+	});
+
+};
+
 function sendSettings(){
-	if(socketopened && !binarytrans && !texttrans){
+	if(socketopened && !binarytrans && !texttrans && typeof settings === 'object'){
 		texttrans = true;
 		socket.send('{"type":"settings","data":'+JSON.stringify(settings)+'}',function(){
 			texttrans = false;
 			console.log('settings sent');
 		});
 	}else{
-		console.log('settings not sent - socket not opened or busy!');
+		console.log('settings not sent - socket not opened or busy! or settings is not object');
 	};
 };
 
@@ -157,7 +190,8 @@ var cam = new Camera();
 cam.baseDirectory("/tmp/cam");
 
 function takePhoto(){
-	cam.prepare({"timeout": settings.photo.timeout,
+	if (typeof settings === 'object'){
+		cam.prepare({"timeout": settings.photo.timeout,
 			"width": settings.photo.width,
 			"height": settings.photo.height,
 			"quality": settings.photo.quality
@@ -165,22 +199,28 @@ function takePhoto(){
 			console.log(file);
 			sendfile(file);
 		});
+	}else{
+		console.log('settings is undefined')
+	};
 };
 
 function takeVideo(){//https://www.raspberrypi.org/documentation/raspbian/applications/camera.md
-	cam.nopreview()
-	.width(settings.video.width)
-	.height(settings.video.height)
-	.framerate(settings.video.framerate)
-	//.bitrate(settings.video.bitrate)//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
-	.timeout(settings.video.time)
-	.recordVideo(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".h264",function(file,err){
+	if (typeof settings === 'object'){
+		cam.nopreview()
+		.width(settings.video.width)
+		.height(settings.video.height)
+		.framerate(settings.video.framerate)
+		//.bitrate(settings.video.bitrate)//bits/s//1080p30 a high quality bitrate would be 15Mbits/s or more
+		.timeout(settings.video.time)
+		.recordVideo(dateformat(new Date(),'yyyy-mm-dd\'T\'HH:MM:ss')+".h264",function(file,err){
 			console.log(file);
 			sendfile(file);
 		});
+	}else{
+		console.log('settings is undefined')
+	};
 };
 //takeVideo();
-
 /*
 setInterval(function(){//photo or video
 	takePhoto();
@@ -194,8 +234,8 @@ setInterval(function(){
 //---END----
 /*
 TODO:
+-get settings from server
 -change settings
 -photo and videorec logic
--save and load settings to/from file
-
+-sending data logic
 */
