@@ -1,17 +1,15 @@
 var express = require('express');
 var dateformat = require('dateformat');
-var fileServer = require('./fileserver.js');
 var options = require('../options');
 var getFileList = require('./getFileList');
+var data = require('./data');
 
 var app = express();
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, result) {
 	getFileList(function (err, myFiles) {
-		var sensorsdata = fileServer.sensorsdata();
-		var statistics = fileServer.statistics();
-		var camSettings = fileServer.camSettings();
+		var statistics = data.statistics;
 
 		if (statistics.onlineDate != null) {
 			statistics.onlineDate = dateformat(statistics.onlineDate, 'yyyy-mm-dd HH:MM:ss');
@@ -19,9 +17,9 @@ app.get('/', function (request, result) {
 
 		result.render('index', {
 			files: myFiles,
-			sd: sensorsdata,
+			sd: data.sensorData,
 			statistics: statistics,
-			camSettings: camSettings,
+			camSettings: data.camSettings,
 		});
 	});
 });
@@ -34,3 +32,5 @@ app.get('/imgs/:img', function(request, result) {
 });
 
 app.listen(options.webPort);
+
+console.log('Web server listening on port', options.webPort);

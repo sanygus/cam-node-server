@@ -1,118 +1,82 @@
-var WS = require('ws');
+var WebSocket = require('ws').Server;
 var fs = require('fs');
+var data = require('./data');
+var options = require('../options');
 
-//TODO: from file!
-var sensorsdata = [];//array of objs
-var statistics = {//statistics (received)
-	online: false,
-	onlineDate: null,
-	setonline: function(online){
-		this.online = online;
-		this.onlineDate = new Date();
-	},
-	allbytes: 0,
-	alltime: 0,//time of trasfer (sec)
-	countfiles: 0,
-	countsensors: 0,
-	speed: {//bytes/sec
-		last: null,
-		avg: null
-	},
-	update: function(bytes,time) {
-		var diffbytes = bytes - this.allbytes;
-		this.allbytes = bytes;
-		if(time!=undefined && time > 0){
-			this.alltime += time/1000;//sec
-			this.speed.last = diffbytes/(time/1000);//bytes/sec
-			this.speed.avg = (this.speed.avg==null) ? this.speed.last : (this.speed.avg + this.speed.last)/2;
-		};
-	}
-};
-var camSettings = null;
+var ws = new WebSocket({ port: options.wsPort });
 
-function FileServer(){
+var bytesReceivedOld = null;
 
-	var WebSocket = WS.Server;
-	var ws = new WebSocket({port:2929});
+ws.on('connection', function(wssocket){
 
-	var bytesReceivedOld = null;
+	var sendfilemode = false;
+	var filename = '';
+	var timestart;//?
+	var timeend;//?
+	console.log('connect open');
+	if(bytesReceivedOld != null){
+		wssocket.bytesReceived = bytesReceivedOld;
+	};
+	data.statistics.setonline(true);
 
-	ws.on('connection', function(wssocket){
+	wssocket.on('message',function(msgData){
 
-		var sendfilemode = false;
-		var filename = '';
-		var timestart;//?
-		var timeend;//?
-		console.log('connect open');
-		if(bytesReceivedOld != null){
-			wssocket.bytesReceived = bytesReceivedOld;
-		};
-		statistics.setonline(true);
+		if(!sendfilemode)
+		{
+			data.statistics.update(wssocket.bytesReceived);//?
 
-		wssocket.on('message',function(data){
-
-			if(!sendfilemode)
+			var datajson = JSON.parse(msgData);
+			switch(datajson.type)
 			{
-				statistics.update(wssocket.bytesReceived);//?
+				case 'sendfile':
+					sendfilemode = true;
+					filename = datajson.filename;
+					console.log('file receive '+filename+' start');
+					timestart = new Date();//?
+					break;
+				case 'sensors':
+					var newsensorsdata = JSON.parse(datajson.data);
+					sensorsdata = sensorsdata.concat(newsensorsdata);
+					//console.log(sensorsdata);
+					data.statistics.countsensors += newsensorsdata.length;
+					break;
+				case 'settings':
+					data.camSettings = datajson.data;
+					console.log('get settings');
+					console.log(data.camSettings);
+					break;
+				default:
+					console.log('undefined type');
 
-				var datajson = JSON.parse(data);
-				switch(datajson.type)
-				{
-					case 'sendfile':
-						sendfilemode = true;
-						filename = datajson.filename;
-						console.log('file receive '+filename+' start');
-						timestart = new Date();//?
-						break;
-					case 'sensors':
-						var newsensorsdata = JSON.parse(datajson.data);
-						sensorsdata = sensorsdata.concat(newsensorsdata);
-						//console.log(sensorsdata);
-						statistics.countsensors += newsensorsdata.length;
-						break;
-					case 'settings':
-						camSettings = datajson.data;
-						console.log('get settings');
-						console.log(camSettings);
-						break;
-					default:
-						console.log('undefined type');
-
-				};
-
-			}else{
-
-				timeend = new Date();//?
-				statistics.update(wssocket.bytesReceived, timeend - timestart);//?
-
-				fs.writeFile('files/'+filename, data, function(){
-					console.log('file '+filename+' saved!');
-					sendfilemode = false;
-					filename = '';
-					statistics.countfiles++;
-				});
 			};
 
-		});
+		}else{
 
-		wssocket.on('close',function(){
-			if(sendfilemode){//?
-				timeend = new Date();
-				statistics.update(wssocket.bytesReceived, timestart - timeend);
-			}else{
-				statistics.update(wssocket.bytesReceived);
-			};
-			statistics.setonline(false);
-			bytesReceivedOld = wssocket.bytesReceived;
-			console.log('connect close');
-			sendfilemode = false;
-			filename = '';
-		});
+			timeend = new Date();//?
+			data.statistics.update(wssocket.bytesReceived, timeend - timestart);//?
+
+			fs.writeFile('files/'+filename, data, function(){
+				console.log('file '+filename+' saved!');
+				sendfilemode = false;
+				filename = '';
+				data.statistics.countfiles++;
+			});
+		};
 
 	});
-};
 
-module.exports = FileServer;
-module.exports.sensorsdata = function(){return sensorsdata;}
-module.exports.statistics = function(){return statistics;}
-module.exports.camSettings = function(){return camSettings;}
+	wssocket.on('close',function(){
+		if(sendfilemode){//?
+			timeend = new Date();
+			data.statistics.update(wssocket.bytesReceived, timestart - timeend);
+		}else{
+			data.statistics.update(wssocket.bytesReceived);
+		};
+		data.statistics.setonline(false);
+		bytesReceivedOld = wssocket.bytesReceived;
+		console.log('connect close');
+		sendfilemode = false;
+		filename = '';
+	});
+
+});
