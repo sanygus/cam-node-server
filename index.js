@@ -1,4 +1,3 @@
 var fs = require('./src/fileserver.js');
-var ws = require('./src/webserver.js');
+require('./src/webServer.js');
 fs();
-ws();

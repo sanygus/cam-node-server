@@ -1,42 +1,36 @@
-var fs = require('fs');
 var express = require('express');
-var async = require('async');
 var dateformat = require('dateformat');
 var fileServer = require('./fileserver.js');
+var options = require('../options');
+var getFileList = require('./getFileList');
 
-function WebServer() {
+var app = express();
+app.set('view engine', 'ejs');
 
-	var filesdir = 'files';
+app.get('/', function (request, result) {
+	getFileList(function (err, myFiles) {
+		var sensorsdata = fileServer.sensorsdata();
+		var statistics = fileServer.statistics();
+		var camSettings = fileServer.camSettings();
 
-	var app = express();
-	app.set('view engine','ejs')
+		if (statistics.onlineDate != null) {
+			statistics.onlineDate = dateformat(statistics.onlineDate, 'yyyy-mm-dd HH:MM:ss');
+		}
 
-	app.get('/', function(request,result){
-		fs.readdir(filesdir, function(err,files){
-			async.map(files, function(file,callback){
-				fs.stat(filesdir+'/'+file,function(er,stat){
-					callback(er,{'name':file,'size':(stat.size/1024).toFixed(1)});
-				});
-
-			}, function(err,myfiles){
-				var sensorsdata = fileServer.sensorsdata();
-				var statistics = fileServer.statistics();
-				var camSettings = fileServer.camSettings();
-
-				if(statistics.onlineDate != null){
-					statistics.onlineDate = dateformat(statistics.onlineDate,'yyyy-mm-dd HH:MM:ss');
-				};
-
-				result.render('index',{title:'mytitle',text:'Files:',files:myfiles,sd:sensorsdata,statistics:statistics,camSettings:camSettings});
-			});
+		result.render('index', {
+			files: myFiles,
+			sd: sensorsdata,
+			statistics: statistics,
+			camSettings: camSettings,
 		});
 	});
+});
 
-	app.get('/imgs/:img', function(request,result){
-		result.sendFile(request.params.img,{root:filesdir});
-	});
+app.get('/imgs/:img', function(request, result) {
+	result.sendFile(
+		request.params.img,
+		{ root: options.filesDir }
+	);
+});
 
-	app.listen(2930);
-};
-
-module.exports = WebServer;
+app.listen(options.webPort);
