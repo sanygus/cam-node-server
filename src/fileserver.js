@@ -1,3 +1,6 @@
+var WS = require('ws');
+var fs = require('fs');
+
 //TODO: from file!
 var sensorsdata = [];//array of objs
 var statistics = {//statistics (received)
@@ -29,8 +32,7 @@ var camSettings = null;
 
 function FileServer(){
 
-	var WebSocket = require('ws').Server;
-	var fs = require('fs');
+	var WebSocket = WS.Server;
 	var ws = new WebSocket({port:2929});
 
 	var bytesReceivedOld = null;
@@ -52,14 +54,14 @@ function FileServer(){
 			if(!sendfilemode)
 			{
 				statistics.update(wssocket.bytesReceived);//?
-				
+
 				var datajson = JSON.parse(data);
 				switch(datajson.type)
 				{
 					case 'sendfile':
 						sendfilemode = true;
 						filename = datajson.filename;
-						console.log('file receive '+filename+' start');	
+						console.log('file receive '+filename+' start');
 						timestart = new Date();//?
 						break;
 					case 'sensors':
@@ -82,7 +84,7 @@ function FileServer(){
 
 				timeend = new Date();//?
 				statistics.update(wssocket.bytesReceived, timeend - timestart);//?
-				
+
 				fs.writeFile('files/'+filename, data, function(){
 					console.log('file '+filename+' saved!');
 					sendfilemode = false;
@@ -92,7 +94,7 @@ function FileServer(){
 			};
 
 		});
-		
+
 		wssocket.on('close',function(){
 			if(sendfilemode){//?
 				timeend = new Date();

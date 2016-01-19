@@ -1,4 +1,3 @@
-
 var WebSocket = require('ws');
 var fs = require('fs');
 var Camera = require("camerapi");//https://www.npmjs.com/package/camerapi
@@ -63,7 +62,7 @@ function sendfile(fname){
 							},3000);
 						};
 					});
-					
+
 				});
 
 			});
@@ -85,7 +84,7 @@ function sendsensorsdata(){
 	var values = '{\\"date\\":\\"'+date+'\\",\\"cputemp\\":\\"'+cputemp+'\\",\\"pingtime\\":\\"'+pingt+'\\"}';//temp
 	sensorsvalues.push(values);
 	console.log(sensorsvalues);
-	
+
 	if(socketopened && !binarytrans && !texttrans){
 		texttrans = true;
 		socket.send('{"type":"sensors","data":"['+sensorsvalues+']"}',function(){
@@ -98,7 +97,7 @@ function sendsensorsdata(){
 		console.log('sensors data not sent - socket not opened or busy!');
 		fs.writeFile(sensorsdatafile,sensorsvalues);
 	};
-	
+
 }
 
 
