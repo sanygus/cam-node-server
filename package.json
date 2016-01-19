@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,9 @@
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "ws": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^3.1.0"
   }
 }

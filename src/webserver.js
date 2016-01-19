@@ -4,7 +4,7 @@ var async = require('async');
 var dateformat = require('dateformat');
 var fileServer = require('./fileserver.js');
 
-function WebServer(){
+function WebServer() {
 
 	var filesdir = 'files';
 
