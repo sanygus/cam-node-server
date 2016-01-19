@@ -17,7 +17,11 @@ fs.exists(sensorsdatafile, function (exist) {
   if (exist) {
     fs.readFile(sensorsdatafile, function (err, data) {
       if (data !== '') {
-        sensorsvalues = data.toString().replace(/},{/g,'}*{').split('*');
+        sensorsvalues = data
+          .toString()
+          .replace(/},{/g, '}*{')
+          .split('*')
+        ;
       }
     });
   }
