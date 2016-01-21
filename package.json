@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "eslint ./src"
+    "test": "eslint ./socket.io"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "dateformat": "^1.0.12",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
+    "socket.io": "^1.4.4",
     "ws": "^1.0.1"
   },
   "devDependencies": {
