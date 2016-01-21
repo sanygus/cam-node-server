@@ -3,7 +3,8 @@
 ### Значения датчиков
 event: 'sensors'
 
-    data: [
+data:
+    [
       {
         date: 'yyyy-mm-dd\'T\'HH:MM:ss',
         sensorname1: value1 (string or num),
@@ -16,7 +17,8 @@ event: 'sensors'
 ### Файлы
 event: 'file'
 
-    data: {
+data:
+    {
     	filename: 'filename',
     	content: binary?
     }
@@ -24,7 +26,8 @@ event: 'file'
 ### Настройки
 event: 'settings'
 
-    data: {
+data:
+    {
       photo: {
         param1: value1,
         ...
@@ -40,7 +43,8 @@ event: 'settings'
 ### Действия
 event: 'acts'
 
-    data: [
+data:
+    [
       {
         act: value0 (string),
         param1: value1 (string or num),
@@ -52,7 +56,8 @@ event: 'acts'
 ### Настройки
 event: 'settings'
 
-    data: {
+data:
+    {
       photo: {
         param1: value1,
         ...
