@@ -1,119 +1,46 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Solarcomp</title>
-	</head>
-	<body>
-    <div style="position:absolute;right:0px;width:50%;">
-      <h2>Settings</h2>
-      <% if(camSettings != null){ %>
-      <div style="width:49%;display:inline-block;vertical-align:top;">
-        <center><b>Photo</b></center><br>
-        width: <%= camSettings.photo.width %><br>
-        height: <%= camSettings.photo.height %><br>
-        quality: <%= camSettings.photo.quality %><br>
-        timeout: <%= camSettings.photo.timeout %><br>
-      </div>
-      <div style="width:50%;display:inline-block;vertical-align:top;">
-        <center><b>Video</b></center><br>
-        width: <%= camSettings.video.width %><br>
-        height: <%= camSettings.video.height %><br>
-        framerate: <%= camSettings.video.framerate %><br>
-        bitrate: <%= camSettings.video.bitrate %><br>
-        time: <%= camSettings.video.time %><br>
-      </div>
-      <% }else{ %>
-      <center>settings are not received yet</center>
-      <% } %>
-    </div>
-		<b>Файлы</b><br>
-		<ul>
-			<% files.forEach(function(file){ %>
-			<li>
-				<a href="imgs/<%= file.name %>"><%= file.name %></a> (<%= file.size %> Kb)
-			</li>
-			<% }); %>
-		</ul>
-    <br><br><br>
-      <b>Status: </b>
-      <% if(statistics.online){ %>
-        <font color=green>ONLINE</font>
-      <% }else{ %>
-        <font color=gray>OFFLINE</font>
-      <% }; %>
-      <% if(statistics.onlineDate != null){ %>
-        (since <%= statistics.onlineDate %>)
-      <% } %>
-      <br><br>
-      <b>Statistics (received)</b>
-      <ul>
-        <li>All KBytes: <%= (statistics.allbytes/1024).toFixed(1) %> KB</li>
-        <li>All time (trasnfer): <%= statistics.alltime.toFixed(3) %> sec</li>
-        <li>Count files: <%= statistics.countfiles %></li>
-        <li>Count sensor values: <%= statistics.countsensors %></li>
-        <li>Speed (last): <%= (statistics.speed.last/1024).toFixed(1) %> KB/sec</li>
-        <li>Speed (avg): <%= (statistics.speed.avg/1024).toFixed(1) %> KB/sec</li>
-      </ul>
-		<br><br><br>
-		CPU:<div id="graph_cput"></div>
-		Ping:<div id="graph_ping"></div>
-		<br><br><br>
-		<b>Values:</b><br>
-			<% sd.forEach(function(values){ %>
-			<b>Date</b>: <%= values.date %><br>
-			<b>CPU temp</b>: <%= values.cputemp %><br>
-			<b>Ping</b>: <%= values.pingtime %><br><br>
-			<% }); %>
-	</body>
-	<script type="text/javascript"
-          src="https://www.google.com/jsapi?autoload={
-            'modules':[{
-              'name':'visualization',
-              'version':'1',
-              'packages':['corechart']
-            }]
-          }"></script>
+  <head>
+    <title>SolarComp</title>
+  </head>
+  <body>
+    <b>Files:</b>
+    <ul>
+    <% files.forEach(function (file) { %>
+      <li><a href='/files/<%= file.name %>'><%= file.name %></a> (<%= file.size %>KB)</li>
+    <% }) %>
+    </ul>
+    <br><br><br><br>
 
-    <script type="text/javascript">
-      google.setOnLoadCallback(draw);
+    <b>Statistics:</b><br>
+    <% if(statistics.online){ %>
+    <font color="green">ONLINE</font>
+    <% }else{ %>
+    <font color="gray">OFFLINE</font>
+    <% } %>
+    <% if(statistics.onlineDate){ %>
+    since <%= statistics.onlineDate %>
+    <% } %>
+    <br><br><br><br>
 
-      function draw() {
-        //--------CPUT---------
-        var datacput = google.visualization.arrayToDataTable([
-          ['Time', 'CPU temp'],
-          <% sd.forEach(function(values){ %>
-          ['<%= values.date.substr(11) %>',  <%= values.cputemp.replace('\'C','') %>],
-          <% }); %>
-        ]);
+    <div id="graph_cput"></div>
+    <div id="graph_ping"></div>
+    <br><br><br><br>
 
-        var optionscput = {
-          title: 'CPU temperature',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var graphcput = new google.visualization.LineChart(document.getElementById('graph_cput'));
-        graphcput.draw(datacput,optionscput);
-
-        //--------PING---------
-        var dataping = google.visualization.arrayToDataTable([
-          ['Time', 'Ping'],
-          <% sd.forEach(function(values){ %>
-          ['<%= values.date.substr(11) %>',  <%= values.pingtime.replace(' ms','') %>],
-          <% }); %>
-        ]);
-
-        var optionsping = {
-          title: 'Ping time to 8.8.8.8',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var graphping = new google.visualization.LineChart(document.getElementById('graph_ping'));
-        graphping.draw(dataping,optionsping);
-
-
-
-      }
-    </script>
+    <b>Sensors values:</b>
+    <% sensors.forEach(function (values) { %>
+      <br>
+      <%= values.date %><br>
+      <%= values.cputemp %><br>
+      <%= values.pingtime %><br>
+      <br>
+    <% }) %>
+  </body>
+  <script type="text/javascript"
+          src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+  var sensors = <%- JSON.stringify(sensors) %>;
+  </script>
+  <script type="text/javascript" src="/static/drawGraphs.js"></script>
+  
 </html>

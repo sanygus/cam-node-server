@@ -1,36 +1,24 @@
+var options = require('./serverOptions');
 var express = require('express');
-var dateformat = require('dateformat');
-var options = require('../options');
 var getFileList = require('./getFileList');
-var data = require('./data');
+var sensorsHandler = require('./sensorsHandler');
+var statistics = require('./statistics');
 
 var app = express();
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, result) {
-	getFileList(function (err, myFiles) {
-		var statistics = data.statistics;
-
-		if (statistics.onlineDate != null) {
-			statistics.onlineDate = dateformat(statistics.onlineDate, 'yyyy-mm-dd HH:MM:ss');
-		}
-
-		result.render('index', {
-			files: myFiles,
-			sd: data.sensorData,
-			statistics: statistics,
-			camSettings: data.camSettings,
-		});
-	});
+  getFileList(function (err, files) {
+    result.render('index', {
+      files: files,
+      sensors: sensorsHandler.getSensors(),
+      statistics: statistics,
+    });
+  });
 });
 
-app.get('/imgs/:img', function(request, result) {
-	result.sendFile(
-		request.params.img,
-		{ root: options.filesDir }
-	);
-});
+app.use('/files', express.static(options.filesDir));
+app.use('/static', express.static(options.filesForWebDir));
 
 app.listen(options.webPort);
-
-console.log('Web server listening on port', options.webPort);
+console.log('Webserver is listening on ', options.webPort);
