@@ -6,20 +6,23 @@
   <body>
     <b>Files:</b>
     <ul>
-    <% files.forEach(function (file) { %>
-      <li><a href='/files/<%= file.name %>'><%= file.name %></a> (<%= file.size %>KB)</li>
-    <% }) %>
+      <% files.forEach(function (file) { %>
+        <li>
+          <a href='/files/<%= file.name %>'><%= file.name %></a> (<%= file.size %>KB)
+        </li>
+      <% }) %>
     </ul>
     <br><br><br><br>
 
-    <b>Statistics:</b><br>
-    <% if(statistics.online){ %>
-    <font color="green">ONLINE</font>
-    <% }else{ %>
-    <font color="gray">OFFLINE</font>
+    <b>Statistics:</b>
+    <br>
+    <% if (statistics.online) { %>
+      <font color="green">ONLINE</font>
+    <% } else { %>
+      <font color="gray">OFFLINE</font>
     <% } %>
-    <% if(statistics.onlineDate){ %>
-    since <%= statistics.onlineDate %>
+    <% if (statistics.onlineDate) { %>
+      since <%= statistics.onlineDate %>
     <% } %>
     <br><br><br><br>
 
@@ -36,10 +39,12 @@
       <br>
     <% }) %>
   </body>
-  <script type="text/javascript"
-          src="https://www.gstatic.com/charts/loader.js"></script>
+  <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>
   <script type="text/javascript">
-  window.SENSORS = <%- JSON.stringify(sensors) %>;
+    window.SENSORS = <%- JSON.stringify(sensors) %>;
   </script>
   <script type="text/javascript">
     <%- include('../src/client/drawGraphs.js'); %>
