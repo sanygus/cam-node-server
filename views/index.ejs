@@ -41,6 +41,8 @@
   <script type="text/javascript">
   var sensors = <%- JSON.stringify(sensors) %>;
   </script>
-  <script type="text/javascript" src="/static/drawGraphs.js"></script>
-  
+  <script type="text/javascript">
+    <%- include('../src/client/drawGraphs.js'); %>
+  </script>
+
 </html>

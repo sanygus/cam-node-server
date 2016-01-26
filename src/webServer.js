@@ -18,7 +18,6 @@ app.get('/', function (request, result) {
 });
 
 app.use('/files', express.static(options.filesDir));
-app.use('/static', express.static(options.filesForWebDir));
 
 app.listen(options.webPort);
 console.log('Webserver is listening on ', options.webPort);
