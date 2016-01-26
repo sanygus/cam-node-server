@@ -4,20 +4,20 @@ var fileHandler = require('./fileHandler');
 var statistics = require('./statistics');
 var io = require('socket.io')();
 
-io.on('connection', function (socket) {
+io.on('connection', function cbOnConnect(socket) {
   console.log('cam connected');
   statistics.setStatus(true);
 
-  socket.on('sensors', function (data) {
+  socket.on('sensors', function cbOnSensors(data) {
     sensorsHandler(data);
   });
 
-  socket.on('file', function (data, complete) {
+  socket.on('file', function cbOnFile(data, complete) {
     fileHandler(data);
     complete();
   });
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function cbOnDisconnect() {
     console.log('cam disconnected');
     statistics.setStatus(false);
   });

@@ -5,20 +5,20 @@ var Camera = require('camerapi');
 var settings = options.defaultSettings;
 var currentTransfer = [];
 var cam = new Camera();
-cam.baseDirectory(options.filesDir);
+var path = require('path');
+cam.baseDirectory(path.resolve(options.filesDir));
 
 function getNextFile(filename, callback) { // 2016-01-24T18:29:19.jpg
   var nextFilename = null;
   var currentFileIndex;
 
-  fs.readdir(options.filesDir, function (err, files) {
-    files.push(filename);
-    files = files.filter(function (fn) {
+  fs.readdir(path.resolve(options.filesDir), function cb(err, files) {
+    var dirfiles = files.concat[filename].filter(function filterFunc(fn) {
       return (/.*\.(jpg|h264)$/.test(fn) && (currentTransfer.indexOf(fn) === -1));
     }).sort().reverse();
-    currentFileIndex = files.indexOf(filename);
-    if (typeof files[currentFileIndex + 1] !== 'undefined') {
-      nextFilename = files[currentFileIndex + 1];
+    currentFileIndex = dirfiles.indexOf(filename);
+    if (typeof dirfiles[currentFileIndex + 1] !== 'undefined') {
+      nextFilename = dirfiles[currentFileIndex + 1];
     }
     callback(nextFilename);
   });
@@ -27,12 +27,13 @@ function getNextFile(filename, callback) { // 2016-01-24T18:29:19.jpg
 function sendFile(socket, filename) {
   if (socket.connected) {
     currentTransfer.push(filename);
-    fs.readFile(options.filesDir + '/' + filename, function (err, data) {
+    fs.readFile(path.resolve(options.filesDir, filename), function cb(err, data) {
       console.log('sending ', filename);
-      socket.emit('file', { filename: filename, content: data }, function () {
+      socket.emit('file', { filename: filename, content: data }, function cbEmit() {
         currentTransfer.splice(currentTransfer.indexOf(filename), 1);
-        fs.unlink(options.filesDir + '/' + filename, function (errunlink) {
-          getNextFile(filename, function (nextFilename) {
+        fs.unlink(path.resolve(options.filesDir, filename), function cbUnlink(errUnlink) {
+          if (errUnlink) { throw errUnlink; }
+          getNextFile(filename, function cbGetNextFile(nextFilename) {
             if (nextFilename) {
               sendFile(socket, nextFilename);
             }
@@ -45,12 +46,13 @@ function sendFile(socket, filename) {
 
 function takePhoto(callback) {
   cam.prepare({
-    'timeout': settings.photo.timeout,
-    'width': settings.photo.width,
-    'height': settings.photo.height,
-    'quality': settings.photo.quality,
+    timeout: settings.photo.timeout,
+    width: settings.photo.width,
+    height: settings.photo.height,
+    quality: settings.photo.quality,
   }).takePicture(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.jpg',
-  function (filename, err) {
+  function cb(filename, err) {
+    if (err) { throw err; }
     callback(filename.substring(filename.lastIndexOf('/') + 1));
   });
 }
@@ -62,16 +64,17 @@ function takeVideo(callback) {
     .framerate(settings.video.framerate)
     // .bitrate(settings.video.bitrate)//bits/s//1080p30 15Mbits/s or more
     .timeout(settings.video.time)
-    .recordVideo(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + ".h264",
-    function (filename, err) {
+    .recordVideo(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.h264',
+    function cb(filename, err) {
+      if (err) { throw err; }
       callback(filename.substring(filename.lastIndexOf('/') + 1));
     });
 }
 
 function photo(socket) {
   if (settings.photo.freq > 0) {
-    setTimeout(function () {
-      takePhoto(function (filename) {
+    setTimeout(function cb() {
+      takePhoto(function cbTakePhoto(filename) {
         sendFile(socket, filename);
         photo(socket);
       });
@@ -81,8 +84,8 @@ function photo(socket) {
 
 function video(socket) {
   if (settings.video.freq > 0 && settings.video.freq > settings.video.time) {
-    setTimeout(function () {
-      takeVideo(function (filename) {
+    setTimeout(function cb() {
+      takeVideo(function cbTakeVideo(filename) {
         sendFile(socket, filename);
         video(socket);
       });
@@ -90,12 +93,12 @@ function video(socket) {
   }
 }
 
-module.exports = function (socket) {
+module.exports = function cb(socket) {
   photo(socket);// take and send photos
   video(socket);// take and send videos
 };
 
 /*
-TODO: photo and video logic
-- photo and video logic
+TODO:
+- отдельно фото/видео и отправка файлов
 */

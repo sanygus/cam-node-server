@@ -2,6 +2,7 @@ var options = require('./camOptions');
 var exec = require('child_process');
 var dateformat = require('dateformat');
 var fs = require('fs');
+var path = require('path');
 
 function getSensors(callback) {
   var sensorsValues = {
@@ -20,12 +21,12 @@ function getSensors(callback) {
 }
 
 function getSensorsFromFile(callback) {
-  fs.exists(options.sensorsFile, function (exist) {
+  fs.exists(options.sensorsFile, function cb(exist) {
     if (exist) {
-      fs.readFile(options.sensorsFile, 'utf8', function (err, data) {
+      fs.readFile(path.resolve(options.sensorsFile), 'utf8', function cbReadFile(err, data) {
         if (data !== '') {
           callback(JSON.parse(data.substring(data.lastIndexOf('{'), data.lastIndexOf('}') + 1)));
-          fs.writeFile(options.sensorsFile, data.substring(0, data.lastIndexOf('{')));
+          fs.writeFile(path.resolve(options.sensorsFile), data.substring(0, data.lastIndexOf('{')));
         } else {
           callback(null);
         }
@@ -41,19 +42,19 @@ function sendSensors(socket, values) {
     console.log(values);
     socket.emit(options.serverSensorsEvent, values);
 
-    getSensorsFromFile(function (valuesFile) {
+    getSensorsFromFile(function cb(valuesFile) {
       if (valuesFile) {
         sendSensors(socket, valuesFile);
       }
     });
   } else {
-    fs.writeFile(options.sensorsFile, JSON.stringify(values), { flag: 'a' });
+    fs.writeFile(path.resolve(options.sensorsFile), JSON.stringify(values), { flag: 'a' });
   }
 }
 
-module.exports = function (socket) {
-  setInterval(function () {
-    getSensors(function (sensorsValues) {
+module.exports = function cb(socket) {
+  setInterval(function cbInterval() {
+    getSensors(function cbGetSensors(sensorsValues) {
       sendSensors(socket, sensorsValues);
     });
   }, options.sensorsFreq);
