@@ -12,7 +12,7 @@ app.get('/', function (request, result) {
     result.render('index', {
       files: files,
       sensors: sensorsHandler.getSensors(),
-      statistics: statistics,
+      statistics: statistics.getStatus(),
     });
   });
 });

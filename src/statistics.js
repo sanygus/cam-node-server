@@ -1,12 +1,16 @@
 var dateformat = require('dateformat');
 
-var statistics = {
-  online: false,
-  onlineDate: null,
+var online = false;
+var onlineDate = null;
+
+module.exports.setStatus = function (status) {
+  online = status;
+  onlineDate = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
 };
 
-module.exports = statistics;
-module.exports.setStatus = function (status) {
-  statistics.online = status;
-  statistics.onlineDate = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
-};
+module.exports.getStatus = function() {
+  return {
+    online: online,
+    onlineDate: onlineDate,
+  };
+}
