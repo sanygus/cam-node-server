@@ -50,11 +50,13 @@ function takePhoto(callback) {
     width: settings.photo.width,
     height: settings.photo.height,
     quality: settings.photo.quality,
-  }).takePicture(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.jpg',
-  function cb(filename, err) {
-    if (err) { throw err; }
-    callback(filename.substring(filename.lastIndexOf('/') + 1));
-  });
+  }).takePicture(
+    dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.jpg',
+    function cb(filename, err) {
+      if (err) { throw err; }
+      callback(filename.substring(filename.lastIndexOf('/') + 1));
+    }
+  );
 }
 
 function takeVideo(callback) {
