@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: [2, "nofunc"] */ // temp
 var options = require('./camOptions');
 var fs = require('fs');
 var dateformat = require('dateformat');
@@ -10,9 +11,9 @@ cam.baseDirectory(path.resolve(options.filesDir));
 function sendFile(socket, filename, callback) {
   if (socket.connected) {
     fs.readFile(path.resolve(options.filesDir, filename), function cb(err, data) {
-      if (err) { throw err; } 
+      if (err) { throw err; }
       console.log('sending ', filename);
-      socket.emit('file', { filename: filename, content: data }, () => {
+      socket.emit('file', { filename: filename, content: data }, function cbEmit() {
         callback(true);
       });
     });
@@ -27,9 +28,12 @@ function takePhoto(callback) {
     width: settings.photo.width,
     height: settings.photo.height,
     quality: settings.photo.quality,
-  }).takePicture(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.jpg', () => {
-    callback();
-  });
+  }).takePicture(
+    dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.jpg',
+    function cbTakePicture() {
+      callback();
+    }
+  );
 }
 
 function takeVideo(callback) {
@@ -39,15 +43,18 @@ function takeVideo(callback) {
     .framerate(settings.video.framerate)
     // .bitrate(settings.video.bitrate)//bits/s//1080p30 15Mbits/s or more
     .timeout(settings.video.time)
-    .recordVideo(dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.h264', () => {
-    callback();
-  });
+    .recordVideo(
+      dateformat(new Date(), 'yyyy-mm-dd\'T\'HH:MM:ss') + '.h264',
+      function cbTakeVideo() {
+        callback();
+      }
+    );
 }
 
 function photo() {
   if (settings.photo.freq > 0) {
     setTimeout(function cb() {
-      takePhoto( () => {
+      takePhoto(function cbTakePhoto() {
         photo();
       });
     }, settings.photo.freq);
@@ -57,7 +64,7 @@ function photo() {
 function video() {
   if (settings.video.freq > 0) {
     setTimeout(function cb() {
-      takeVideo( () => {
+      takeVideo(function cbTakeVideo() {
         video();
       });
     }, settings.video.freq);
@@ -65,16 +72,17 @@ function video() {
 }
 
 function fileSender(socket) {
+  var filesDir;
   if (socket.connected) {
-    fs.readdir(path.resolve(options.filesDir), (err, files) => {
+    fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
       if (err) { throw err; }
-      var filesDir = files.slice().filter( (fileName) => {
+      filesDir = files.slice().filter(function filesFilter(fileName) {
         return /.*\.(jpg|h264)$/.test(fileName);
       }).sort().reverse();
-      if(filesDir.length > 0) {
-        sendFile(socket, filesDir[0], (success) => {
+      if (filesDir.length > 0) {
+        sendFile(socket, filesDir[0], function cdSendFile(success) {
           if (success) {
-            fs.unlink(path.resolve(options.filesDir, filesDir[0]), () => {
+            fs.unlink(path.resolve(options.filesDir, filesDir[0]), function cbUnlink() {
               fileSender(socket);
             });
           } else {
@@ -91,10 +99,10 @@ function fileSender(socket) {
 }
 
 function callFileSender(socket) {
-  setTimeout( () => {
+  setTimeout(function cbSetTimeout() {
     fileSender(socket);
   }, options.fileSenderFreq);
-};
+}
 
 module.exports = function cb(socket) {
   photo();// take and send photos
