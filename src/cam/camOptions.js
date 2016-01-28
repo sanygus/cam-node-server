@@ -5,6 +5,7 @@ module.exports = {
   sensorsFile: '/tmp/sensors',
   filesDir: '/tmp/cam',
   sensorsFreq: 3000,
+  fileSenderFreq: 2000,
   defaultSettings: {
     photo: {
       width: 2592, // px
