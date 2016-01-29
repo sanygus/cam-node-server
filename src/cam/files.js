@@ -1,26 +1,12 @@
-/* eslint no-use-before-define: [2, "nofunc"] */ // temp
 var options = require('./camOptions');
-var fs = require('fs');
 var dateformat = require('dateformat');
 var Camera = require('camerapi');
 var path = require('path');
 var settings = options.defaultSettings;
 var cam = new Camera();
-cam.baseDirectory(path.resolve(options.filesDir));
+var fileSender = require('./fileSender');
 
-function sendFile(socket, filename, callback) {
-  if (socket.connected) {
-    fs.readFile(path.resolve(options.filesDir, filename), function cb(err, data) {
-      if (err) { throw err; }
-      console.log('sending ', filename);
-      socket.emit('file', { filename: filename, content: data }, function cbEmit() {
-        callback(true);
-      });
-    });
-  } else {
-    callback(false);
-  }
-}
+cam.baseDirectory(path.resolve(options.filesDir));
 
 function takePhoto(callback) {
   cam.prepare({
@@ -71,43 +57,10 @@ function video() {
   }
 }
 
-function fileSender(socket) {
-  var filesDir;
-  if (socket.connected) {
-    fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
-      if (err) { throw err; }
-      filesDir = files.slice().filter(function filesFilter(fileName) {
-        return /.*\.(jpg|h264)$/.test(fileName);
-      }).sort().reverse();
-      if (filesDir.length > 0) {
-        sendFile(socket, filesDir[0], function cdSendFile(success) {
-          if (success) {
-            fs.unlink(path.resolve(options.filesDir, filesDir[0]), function cbUnlink() {
-              fileSender(socket);
-            });
-          } else {
-            callFileSender(socket);
-          }
-        });
-      } else {
-        callFileSender(socket);
-      }
-    });
-  } else {
-    callFileSender(socket);
-  }
-}
-
-function callFileSender(socket) {
-  setTimeout(function cbSetTimeout() {
-    fileSender(socket);
-  }, options.fileSenderFreq);
-}
-
 module.exports = function cb(socket) {
   photo();// take and send photos
   video();// take and send videos
-  fileSender(socket);
+  fileSender(socket, options.filesDir, options.fileSenderFreq);
 };
 
 /*
