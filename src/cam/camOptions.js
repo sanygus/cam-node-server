@@ -20,7 +20,7 @@ module.exports = {
       framerate: 15, // fps
       bitrate: 15000000, // bits/s // 1080p30 a high quality bitrate would be 15Mbits/s or more
       time: 5000, // ms
-      freq: 0, // ms
+      freq: 5000, // ms
     },
   },
 };

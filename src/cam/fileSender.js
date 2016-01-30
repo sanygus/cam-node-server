@@ -1,6 +1,6 @@
 var fs = require('fs');
-var options = require('./camOptions');
 var path = require('path');
+var options = require('./camOptions');
 
 function getFileToSend(dirPath, callback) {
   fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
@@ -37,10 +37,17 @@ function sendFile(socket, filePath, callback) {
 
 function trySendNewestFile(socket, dirPath, callback) {
   getFileToSend(dirPath, function cb(err, filePath) {
+    if (err) { throw err; }
     if (filePath) {
-      sendFile(socket, filePath, function cbSendFile(errSendFile) {
+      sendFile(socket, filePath, function cbSendFile(errSendFile, sent) {
         if (errSendFile) { throw errSendFile; }
-        callback(null, true);
+        if (sent) {// ?
+          fs.unlink(filePath, function cbUnlink() {
+            callback(null, true);
+          });
+        } else {
+          callback(null, false);
+        }
       });
     } else {
       callback(null, false);
@@ -56,7 +63,7 @@ function fileSender(socket, dirPath, interval) {
   trySendNewestFile(socket, dirPath, function cb(err, sent) {
     if (err) { throw err; }
     if (sent) {
-      process.setImmediate(runAgain);
+      setImmediate(runAgain);
     } else {
       setTimeout(runAgain, interval);
     }
