@@ -1,9 +1,8 @@
 var fs = require('fs');
 var path = require('path');
-var options = require('./camOptions');
 
 function getFileToSend(dirPath, callback) {
-  fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
+  fs.readdir(dirPath, function cbReadDir(err, files) {
     var filesDir;
     if (err) { throw err; }
     filesDir = files.slice().filter(function filesFilter(fileName) {
