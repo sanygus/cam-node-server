@@ -1,9 +1,10 @@
-/* global google, SENSORS */
+/* global google, SENSORS, SPEED */
 
 var sensorsArrayTableCPUT = [['Time', 'CPU temp']];
 var sensorsArrayTablePing = [['Time', 'Ping']];
+var SpeedArrayTable = [['Time', 'Speed']];
 
-function draw() {
+function drawSensors() {
   // --------CPUT---------
   var datacput = google.visualization.arrayToDataTable(sensorsArrayTableCPUT);
   var optionscput = {
@@ -23,8 +24,26 @@ function draw() {
   var graphping = new google.visualization.LineChart(document.getElementById('graph_ping'));
 
   // --------DRAWING---------
-  graphping.draw(dataping, optionsping);
   graphcput.draw(datacput, optionscput);
+  graphping.draw(dataping, optionsping);
+}
+
+function drawSpeed() {
+  // --------SPEED---------
+  var dataSpeed = google.visualization.arrayToDataTable(SpeedArrayTable);
+  var optionsSpeed = {
+    title: 'Speed (KB/s)',
+    curveType: 'function',
+    legend: { position: 'bottom' },
+  };
+  var graphSpeed = new google.visualization.LineChart(document.getElementById('graph_speed'));
+
+  // --------DRAWING---------
+  graphSpeed.draw(dataSpeed, optionsSpeed);
+}
+
+if ((SENSORS.length > 0) || (SPEED.length > 0)) {
+  google.charts.load('current', { packages: ['corechart'] });
 }
 
 if (SENSORS.length > 0) {
@@ -33,6 +52,13 @@ if (SENSORS.length > 0) {
     sensorsArrayTablePing.push([values.date, parseFloat(values.pingtime.replace(' ms', ''))]);
   });
 
-  google.charts.load('current', { packages: ['corechart'] });
-  google.charts.setOnLoadCallback(draw);
+  google.charts.setOnLoadCallback(drawSensors);
+}
+
+if (SPEED.length > 0) {
+  SPEED.forEach(function pushSpeed(values) {
+    SpeedArrayTable.push([values.date, parseFloat(values.value)]);
+  });
+
+  google.charts.setOnLoadCallback(drawSpeed);
 }

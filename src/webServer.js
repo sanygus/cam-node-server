@@ -14,7 +14,7 @@ app.get('/', function cbGetRoot(request, result) {
     result.render('index', {
       files: files,
       sensors: sensorsHandler.getSensors(),
-      statistics: statistics.getStatus(),
+      statistics: statistics.getStatistics(),
     });
   });
 });

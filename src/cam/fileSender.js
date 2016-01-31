@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var options = require('./camOptions');
+var statisticsSender = require('./statisticsSender');
 
 function getFileToSend(dirPath, callback) {
   fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
@@ -18,15 +19,18 @@ function getFileToSend(dirPath, callback) {
 }
 
 function sendFile(socket, filePath, callback) {
+  var startTime;
   if (socket.connected) {
     fs.readFile(filePath, function cb(err, data) {
       if (err) { throw err; }
       console.log('sending ', filePath);
+      startTime = new Date();
       socket.emit(
         'file',
         { filename: path.basename(filePath), content: data },
         function cbEmit() {
           callback(null, true);
+          statisticsSender(socket, data.length, (new Date() - startTime));
         }
       );
     });

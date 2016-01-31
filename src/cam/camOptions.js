@@ -12,7 +12,7 @@ module.exports = {
       height: 1944, // px
       quality: 100, // %
       timeout: 200, // ms
-      freq: 0, // ms
+      freq: 5000, // ms
     },
     video: {
       width: 1280, // px

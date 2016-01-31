@@ -17,6 +17,10 @@ io.on('connection', function cbOnConnect(socket) {
     complete();
   });
 
+  socket.on('statistics', function cbOnStat(data) {
+    statistics.statisticsHandler(data);
+  });
+
   socket.on('disconnect', function cbOnDisconnect() {
     console.log('cam disconnected');
     statistics.setStatus(false);
