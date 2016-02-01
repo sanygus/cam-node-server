@@ -57,6 +57,6 @@ module.exports = function cb(socket) {
     getSensors(function cbGetSensors(sensorsValues) {
       sendSensors(socket, sensorsValues);
     });
-  }, options.sensorsFreq);
+  }, options.sensorsInterval);
 };
-// TODO: check sensors freq
+/* TODO: setTimeout */

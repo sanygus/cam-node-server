@@ -1,6 +1,8 @@
 var options = require('./camOptions');
 var sensors = require('./sensors');
-var files = require('./files');
+var fileSender = require('./fileSender');
+var photo = require('./photo');
+var video = require('./video');
 var socket = require('socket.io-client').connect(options.serverAddress);
 
 socket.on('connect', function cb() {
@@ -12,4 +14,6 @@ socket.on('disconnect', function cb() {
 });
 
 sensors(socket);
-files(socket);
+fileSender(socket, options.filesDir, options.fileSenderInterval);
+photo();
+video();
