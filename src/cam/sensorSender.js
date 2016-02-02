@@ -52,7 +52,7 @@ function sendSensors(socket, values) {
   }
 }
 
-module.exports = function cb(socket) {
+module.exports = function sensorSender(socket) {
   setInterval(function cbInterval() {
     getSensors(function cbGetSensors(sensorsValues) {
       sendSensors(socket, sensorsValues);

@@ -26,10 +26,10 @@ function takeVideo(callback) {
   }
 }
 
-module.exports = function video() {
+module.exports = function videoShooter() {
   setTimeout(function cb() {
     takeVideo(function cbTakeVideo() {
-      video();
+      videoShooter();
     });
   }, settings.interval);
 };

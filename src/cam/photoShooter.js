@@ -24,10 +24,10 @@ function takePhoto(callback) {
   }
 }
 
-module.exports = function photo() {
+module.exports = function photoShooter() {
   setTimeout(function cb() {
     takePhoto(function cbTakePhoto() {
-      photo();
+      photoShooter();
     });
   }, settings.interval);
 };
