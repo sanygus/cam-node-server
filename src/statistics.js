@@ -3,9 +3,9 @@ var dateformat = require('dateformat');
 var online = false;
 var onlineDate = null;
 var bytes = 0;
-var time = 0;// ms
-var speed = [];// {date, value(,3)} Kbytes/sec
-var speedAvg = 0;// Kbytes/sec (,3)
+var time = 0; // ms
+var speed = []; // {date, value(,3)} Kbytes/sec
+var speedAvg = 0; // Kbytes/sec (,3)
 
 module.exports.setStatus = function setStatus(status) {
   online = status;

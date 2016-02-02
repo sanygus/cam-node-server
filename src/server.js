@@ -2,7 +2,7 @@ var options = require('./serverOptions');
 var sensorsHandler = require('./sensorsHandler');
 var fileHandler = require('./fileHandler');
 var statistics = require('./statistics');
-var io = require('socket.io')();
+var io = (require('socket.io'))();
 
 io.on('connection', function cbOnConnect(socket) {
   console.log('cam connected');
