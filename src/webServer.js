@@ -3,6 +3,7 @@ var express = require('express');
 var getFileList = require('./getFileList');
 var sensorsHandler = require('./sensorsHandler');
 var statistics = require('./statistics');
+var log = require('./log');
 var path = require('path');
 
 var app = express();
@@ -22,4 +23,4 @@ app.get('/', function cbGetRoot(request, result) {
 app.use('/files', express.static(path.resolve(options.filesDir)));
 
 app.listen(options.webPort);
-console.log('Webserver is listening on ', options.webPort);
+log('Webserver is listening on ' + options.webPort);

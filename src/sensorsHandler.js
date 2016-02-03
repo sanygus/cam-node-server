@@ -1,7 +1,9 @@
+var log = require('./log');
+
 var sensors = [];
 
 module.exports = function sensorsHandler(values) {
-  console.log(values);
+  log(values);
   sensors.push(values);
 };
 
