@@ -6,7 +6,7 @@ event: 'sensors'
 data:
 
     {
-      date: 'yyyy-mm-dd\'T\'HH:MM:ss',
+      date: 'yyyy-mm-dd HH:MM:ss',
       sensorname1: value1 (string or num),
       sensorname2: value2 (string or num),
       ...
@@ -19,7 +19,7 @@ data:
 
     {
     	filename: 'filename',
-    	content: binary?
+    	content: binary
     }
 
 ### Настройки
@@ -36,6 +36,17 @@ data:
         param1: value1,
         ...
       }
+    }
+
+### Статистика
+event: 'statistics'
+
+data:
+
+    {
+      date: 'yyyy-mm-dd HH:MM:ss',
+      size: bytes,
+      time: ms
     }
 
 # Server -> Client
