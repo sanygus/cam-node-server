@@ -26,11 +26,19 @@
     <% } %>
     <br>
     All bytes: <%= statistics.MBytes %> MB<br>
+    Files transmitted: <%= statistics.filesCount %><br>
     All time: <%= statistics.sec %> sec<br>
     <% if (statistics.speed.length > 0) { %>
     Speed (last): <%= statistics.speed[statistics.speed.length - 1].value %> KB/s<br>
     <% } %>
     Speed (avg): <%= statistics.speedAvg %> KB/s<br>
+    <br><br><br><br>
+
+    <b>System stat</b><br>
+    uptime:<br>
+    <%= statistics.uptime %><br><br>
+    Temp disk:<br>
+    <%- statistics.disk %>
     <br><br><br><br>
 
     <div id="graph_cput"></div>

@@ -18,8 +18,9 @@ io.on('connection', function cbOnConnect(socket) {
     complete();
   });
 
-  socket.on('statistics', function cbOnStat(data) {
+  socket.on('statistics', function cbOnStat(data, complete) {
     statistics.statisticsHandler(data);
+    complete();
   });
 
   socket.on('disconnect', function cbOnDisconnect() {

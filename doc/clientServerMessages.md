@@ -49,6 +49,14 @@ data:
       time: ms
     }
 
+or
+
+    {
+      date: 'yyyy-mm-dd HH:MM:ss',
+      uptime: string,
+      disk: string
+    }
+
 # Server -> Client
 
 ### Действия
