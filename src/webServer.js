@@ -12,7 +12,7 @@ app.set('views', path.resolve(process.cwd(), 'views'));
 
 app.get('/', function cbGetRoot(request, result) {
   getFileList(function cbGetFileList(err, files) {
-    result.render('index', {
+    result.render('index.ejs', {
       files: files,
       sensors: sensorsHandler.getSensors(),
       statistics: statistics.getStatistics(),
@@ -21,6 +21,7 @@ app.get('/', function cbGetRoot(request, result) {
 });
 
 app.use('/files', express.static(path.resolve(options.filesDir)));
+app.use('/assets', express.static(path.resolve(options.assetsWebDir)));
 
 app.listen(options.webPort);
 log('Webserver is listening on ' + options.webPort);

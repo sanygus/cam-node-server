@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SolarComp</title>
+  </head>
+  <body>
+    <b>Files:</b>
+    <ul>
+      <% files.forEach(function (file) { %>
+        <li>
+          <a href='/files/<%= file.name %>'><%= file.name %></a> (<%= file.size %>KB)
+        </li>
+      <% }) %>
+    </ul>
+    <br><br><br><br>
+
+    <b>Statistics:</b>
+    <br>
+    <% if (statistics.online) { %>
+      <font color="green">ONLINE</font>
+    <% } else { %>
+      <font color="gray">OFFLINE</font>
+    <% } %>
+    <% if (statistics.onlineDate) { %>
+      since <%= statistics.onlineDate %>
+    <% } %>
+    <br>
+    All bytes: <%= statistics.MBytes %> MB<br>
+    Files transmitted: <%= statistics.filesCount %><br>
+    All time: <%= statistics.sec %> sec<br>
+    <% if (statistics.speed.length > 0) { %>
+    Speed (last): <%= statistics.speed[statistics.speed.length - 1].value %> KB/s<br>
+    <% } %>
+    Speed (avg): <%= statistics.speedAvg %> KB/s<br>
+    <br><br><br><br>
+
+    <b>System stat</b><br>
+    uptime:<br>
+    <%= statistics.uptime %><br><br>
+    Temp disk:<br>
+    <%- statistics.disk %>
+    <br><br><br><br>
+
+    <div id="graph_cput"></div>
+    <div id="graph_ping"></div>
+    <br><br><br><br>
+
+    <div id="graph_speed"></div>
+    <br><br><br><br>
+
+    <b>Sensors values:</b>
+    <% sensors.forEach(function (values) { %>
+      <br>
+      <%= values.date %><br>
+      <%= values.cputemp %><br>
+      <%= values.pingtime %><br>
+      <br>
+    <% }) %>
+  </body>
+  <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>
+  <script type="text/javascript">
+    window.SENSORS = <%- JSON.stringify(sensors) %>;
+    window.SPEED = <%- JSON.stringify(statistics.speed) %>;
+  </script>
+  <script type="text/javascript">
+    <%- include('../src/client/drawGraphs.js'); %>
+  </script>
+
+</html>
