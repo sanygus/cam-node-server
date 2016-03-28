@@ -3,6 +3,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
+// UI
+import Paper from 'material-ui/lib/paper';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import Subheader from 'material-ui/lib/Subheader';
+import ContentArchiveIcon from 'material-ui/lib/svg-icons/content/archive';
 
 const Data = React.createClass({
   getInitialState: function() {
@@ -27,7 +33,7 @@ const Data = React.createClass({
         data: {
           filesList: res.body.filesList,
           sensors: res.body.sensors,
-          date: Date.now(),
+          date: (new Date).toISOString(),
         }
       });
     });
@@ -47,12 +53,20 @@ const FileList = React.createClass({
   render: function() {
     return (
       <div className='fileList'>
-        Files ({this.props.list.length})
-        <ul>{
-          this.props.list.map( (file, index) => {
-            return <li key={file.name}>{index+1}. <a href={'/files/'+file.name}>{file.name}</a> ({file.size} Kb)</li>;
-          })
-        }</ul>
+        <Paper zDepth={2} style={{width: '500px'}}>
+          <List>
+            <Subheader>Files ({this.props.list.length})</Subheader>
+            {
+              this.props.list.map( (file, index) => {
+                return <ListItem
+                  key={file.name}
+                  primaryText={`${index+1}. ${file.name} (${file.size} Kb)`}
+                  rightIcon={<ContentArchiveIcon />} 
+                />;
+              })
+            }
+          </List>
+        </Paper>
       </div>
     );
   },
@@ -62,10 +76,14 @@ const Sensors = React.createClass({
   render: function() {
     return (
       <div className='sensors'>
-        Sensors values
-        <li>date: {this.props.sensors.date}</li>
-        <li>cputemp: {this.props.sensors.cputemp}</li>
-        <li>pingtime: {this.props.sensors.pingtime}</li>
+        <Paper zDepth={2} style={{width: '500px'}}>
+          <List>
+            <Subheader>Sensors values (last)</Subheader>
+            <ListItem primaryText={`date: ${this.props.sensors.date}`} />
+            <ListItem primaryText={`cputemp: ${this.props.sensors.cputemp}`} />
+            <ListItem primaryText={`pingtime: ${this.props.sensors.pingtime}`} />
+          </List>
+        </Paper>
       </div>
     );
   },
@@ -75,21 +93,3 @@ ReactDOM.render(
   <Data />,
   document.getElementById('main')
 );
-
-/*ReactDOM.render(
-  <AppBar
-            title="Super Secret Password"
-          />,
-  document.getElementById('main')
-);*/
-/*
-setTimeout(() => {
-  request.get('/data').end((err, res) => {
-    alert(err);
-    console.log(res);
-    ReactDOM.render(
-      React.createElement('h1', null, 'HI1'),
-      document.getElementById('main')
-    );
-  });
-}, 2000);*/
