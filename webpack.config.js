@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  entry: './src/client/index',
+  entry: './src/client/index.jsx',
   output: {
     path: './src/client/assets',
     filename: 'build.js',
@@ -12,7 +12,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /index.js/,
+        test: /index.jsx/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {

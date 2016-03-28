@@ -5,17 +5,36 @@ var sensorsHandler = require('./sensorsHandler');
 var statistics = require('./statistics');
 var log = require('./log');
 var path = require('path');
+const async = require('async');
 
 var app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.resolve(process.cwd(), 'views'));
 
-app.get('/', function cbGetRoot(request, result) {
-  getFileList(function cbGetFileList(err, files) {
-    result.render('index.ejs', {
-      files: files,
-      sensors: sensorsHandler.getSensors(),
-      statistics: statistics.getStatistics(),
+app.get('/', (request, result) => {
+  getFileList((err, files) => {
+    result.render('index.ejs');
+  });
+});
+
+app.get('/data', (request, result) => {
+  async.parallel([
+    (callbackAsync) => {
+       getFileList((err, files) => {
+        if (err) { throw err; }
+        callbackAsync(null, files);
+      });
+    },
+    (callbackAsync) => {
+      sensorsHandler.getSensors( (err, sensors) => {
+        if (err) { throw err; }
+        callbackAsync(null, sensors[sensors.length-1]);
+      });
+    }
+  ], (err, results) => {
+    result.json({
+      filesList: results[0],
+      sensors: results[1],
     });
   });
 });

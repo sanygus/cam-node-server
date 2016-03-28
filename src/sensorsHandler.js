@@ -1,12 +1,14 @@
-var log = require('./log');
+'use strict'
 
-var sensors = [];
+const log = require('./log');
 
-module.exports = function sensorsHandler(values) {
+let sensors = [];
+
+module.exports.giveSensors = function giveSensors(values) {
   log(values);
   sensors.push(values);
 };
 
-module.exports.getSensors = function getSensors() {
-  return sensors;
+module.exports.getSensors = function getSensors(callback) {
+  callback(null, sensors);
 };

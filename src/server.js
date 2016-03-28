@@ -10,7 +10,7 @@ io.on('connection', function cbOnConnect(socket) {
   statistics.setStatus(true);
 
   socket.on('sensors', function cbOnSensors(data) {
-    sensorsHandler(data);
+    sensorsHandler.giveSensors(data);
   });
 
   socket.on('file', function cbOnFile(data, complete) {
