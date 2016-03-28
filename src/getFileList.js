@@ -1,14 +1,16 @@
-var fs = require('fs');
-var options = require('./serverOptions');
-var async = require('async');
-var path = require('path');
+'use strict';
+
+const fs = require('fs');
+const options = require('./serverOptions');
+const async = require('async');
+const path = require('path');
 
 module.exports = function getFileList(callback) {
-  fs.readdir(path.resolve(options.filesDir), function cbReadDir(err, files) {
+  fs.readdir(path.resolve(options.filesDir), (err, files) => {
     async.map(
       files,
-      function funcMap(file, done) {
-        fs.stat(path.resolve(options.filesDir, file), function cbStat(errFile, stat) {
+      (file, done) => {
+        fs.stat(path.resolve(options.filesDir, file), (errFile, stat) => {
           if (errFile) { return done(errFile); }
           done(null, {
             name: file,
@@ -16,7 +18,7 @@ module.exports = function getFileList(callback) {
           });
         });
       },
-      function cbMap(errMap, myFiles) {
+      (errMap, myFiles) => {
         if (errMap) { return callback(errMap); }
         callback(null, myFiles);
       }

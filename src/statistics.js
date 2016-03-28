@@ -1,15 +1,17 @@
-var dateformat = require('dateformat');
-var log = require('./log');
+'use strict';
 
-var online = false;
-var onlineDate = null;
-var bytes = 0;
-var files = 0;
-var time = 0; // ms
-var speed = []; // {date, value(,3)} Kbytes/sec
-var speedAvg = 0; // Kbytes/sec (,3)
-var uptime = ''; // string
-var disk = ''; // string
+const dateformat = require('dateformat');
+const log = require('./log');
+
+let online = false;
+let onlineDate = null;
+let bytes = 0;
+let files = 0;
+let time = 0; // ms
+const speed = []; // {date, value(,3)} Kbytes/sec
+let speedAvg = 0; // Kbytes/sec (,3)
+let uptime = ''; // string
+let disk = ''; // string
 
 module.exports.setStatus = function setStatus(status) {
   online = status;
@@ -37,13 +39,13 @@ module.exports.statisticsHandler = function statisticsHandler(data) {
 
 module.exports.getStatistics = function getStatistics() {
   return {
-    online: online,
-    onlineDate: onlineDate,
+    online,
+    onlineDate,
     MBytes: (bytes / 1024 / 1024).toFixed(3), // bytes -> MB
     filesCount: files,
     sec: (time / 1000).toFixed(3), // ms -> sec
-    speed: speed, // {date, value} Kbytes/sec
-    speedAvg: speedAvg, // KB/sec
+    speed, // {date, value} Kbytes/sec
+    speedAvg, // KB/sec
     uptime: uptime.replace('\n', ''),
     disk: disk.replace('\n', '<br>'),
   };

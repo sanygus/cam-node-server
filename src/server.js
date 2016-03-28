@@ -1,33 +1,35 @@
-var options = require('./serverOptions');
-var sensorsHandler = require('./sensorsHandler');
-var fileHandler = require('./fileHandler');
-var statistics = require('./statistics');
-var log = require('./log');
-var io = (require('socket.io'))();
+'use strict';
 
-io.on('connection', function cbOnConnect(socket) {
+const options = require('./serverOptions');
+const sensorsHandler = require('./sensorsHandler');
+const fileHandler = require('./fileHandler');
+const statistics = require('./statistics');
+const log = require('./log');
+const io = (require('socket.io'))();
+
+io.on('connection', (socket) => {
   log('cam connected');
   statistics.setStatus(true);
 
-  socket.on('sensors', function cbOnSensors(data) {
+  socket.on('sensors', (data) => {
     sensorsHandler.giveSensors(data);
   });
 
-  socket.on('file', function cbOnFile(data, complete) {
+  socket.on('file', (data, complete) => {
     fileHandler(data);
     complete();
   });
 
-  socket.on('statistics', function cbOnStat(data, complete) {
+  socket.on('statistics', (data, complete) => {
     statistics.statisticsHandler(data);
     complete();
   });
 
-  socket.on('disconnect', function cbOnDisconnect() {
+  socket.on('disconnect', () => {
     log('cam disconnected');
     statistics.setStatus(false);
   });
 });
 
 io.listen(options.socketPort);
-log('server is listening on port ' + options.socketPort);
+log(`server is listening on port ${options.socketPort}`);

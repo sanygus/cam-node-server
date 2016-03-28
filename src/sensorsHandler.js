@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
 const log = require('./log');
 
-let sensors = [];
+const sensors = [];
 
 module.exports.giveSensors = function giveSensors(values) {
   log(values);
