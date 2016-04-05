@@ -13,10 +13,11 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /index.js/,
+        test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
+          plugins: ['transform-class-properties'],
           presets: ['react', 'es2015']
         },
       }
