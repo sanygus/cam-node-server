@@ -3,37 +3,42 @@
 import React from 'react';
 import 'isomorphic-fetch';
 // UI
-import Paper from 'material-ui/lib/paper';
+/*import Paper from 'material-ui/lib/paper';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Subheader from 'material-ui/lib/Subheader';
 import ContentArchiveIcon from 'material-ui/lib/svg-icons/content/archive';
-
+*/
 export class UI extends React.Component {
   static propTypes: {
     filesList: React.PropTypes.array,
     sensors: React.PropTypes.object,
-    date: React.PropTypes.any,
-  }
-  static defaultProps: {
-    filesList: [],
-    sensors: {},
-    date: null,
-  }
+    date: React.PropTypes.any, //?
+  };
+  static defaultProps = {
+    initFilesList: [],
+    initSensors: {},
+    initDate: null,
+  };
   constructor(props) {
-    super();
+    super(props);
+    this.state = {
+      filesList: props.initFilesList,
+      sensors: props.initSensors,
+      date: props.initDate,
+    };
     this.timer = setInterval(this.update, 1000);
   }
   render() {
     return (
       <div>
-        Update time {this.state.data.date}
-        <FileList list={this.state.data.filesList} />
-        <Sensors sensors={this.state.data.sensors} />
+        Update time {this.state.date}
+
       </div>
     );
   }
-
+        //<FileList list={this.state.filesList} />
+        //<Sensors sensors={this.state.sensors} />
   /*componentWillUnmount: function() {
     clearInterval(this.timer);
   },*/
@@ -42,7 +47,8 @@ export class UI extends React.Component {
       .then((response) => {
         response.json().then((data) => {
           console.log(data);
-          this.setState({
+          console.log(this);
+          this.parent().setState({ //this-? state - Redux?
             filesList: data.filesList,
             sensors: data.sensors,
             date: (new Date).toISOString(),
@@ -50,13 +56,24 @@ export class UI extends React.Component {
         });
       }, (err) => { 
         console.log(err);
-      }
-    )
+      });
   }
 }
-/*
-class FileList = React.createClass({
-  render: function() {
+
+class FileList extends React.Component {
+  static propTypes: {
+    list: React.PropTypes.array
+  };
+  /*static defaultProps = {
+    initList: [],
+  };*/
+  /*constructor(props) {
+    super(props);
+    this.state = {
+      list: props.list,
+    };
+  }*/
+  render() {
     return (
       <div className='fileList'>
         <Paper zDepth={2} style={{width: '500px'}}>
@@ -75,9 +92,9 @@ class FileList = React.createClass({
         </Paper>
       </div>
     );
-  },
-});
-
+  }
+}
+/*
 const Sensors = React.createClass({
   render: function() {
     return (

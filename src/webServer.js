@@ -32,7 +32,7 @@ app.get('/data', (request, result) => {
       (callbackAsync) => {
         sensorsHandler.getSensors((err, sensors) => {
           if (err) { throw err; }
-          callbackAsync(null, sensors[sensors.length - 1] || []);
+          callbackAsync(null, sensors[sensors.length - 1] || {});
         });
       },
     ],

@@ -2,9 +2,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyUI from './ui.js';
+import {UI} from './ui';
 
 ReactDOM.render(
-  <MyUI />,
+  <UI />,
   document.getElementById('main')
 );
