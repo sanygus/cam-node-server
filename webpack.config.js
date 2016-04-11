@@ -17,10 +17,12 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          plugins: ['transform-class-properties'],
+          // plugins: ['transform-class-properties'],
           presets: ['react', 'es2015']
         },
       }
     ]
   },
+
+  devtool: 'inline-souce-map',
 }
