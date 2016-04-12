@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import reducer from './reducer';
+import MainPanel from './MainPanel';
+
 // import {UI} from './ui';
 /*
 ReactDOM.render(
@@ -9,49 +12,7 @@ ReactDOM.render(
 );
 */
 
-const defaultState = {
-  fileList: [],
-  sensors: {
-    cpuTemp: null,
-    pingTime: null,
-  }
-}
-
-const updateState = (state) => {
-  return {
-    fileList: [...state.fileList, '123', '321'],
-    sensors: {
-      cpuTemp: state.sensors.cpuTemp + 1,
-      pingTime: state.sensors.pingTime + 1,
-    }
-  };
-}
-
-const data = (state = defaultState, action) => {
-  switch (action.type) {
-    case 'UPDATE':
-      return updateState(state);
-    default:
-      return state;
-  }
-}
-
-const store = createStore(data);
-
-const MainPanel = ({ values, onUpdate }) => (
-  <div>
-    <h3>FileList</h3>
-    {
-      values.fileList.map( (value, key) => {
-        return <li key={key}>{value}</li>;
-      })
-    }
-    <h3>Sensors</h3>
-    <p>cpu temperature {values.sensors.cpuTemp}</p>
-    <p>ping time {values.sensors.pingTime}</p>
-    <p><button onClick={onUpdate}>Update</button></p>
-  </div>
-);
+const store = createStore(reducer);
 
 const render = () => {
   ReactDOM.render(
