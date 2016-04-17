@@ -1,4 +1,5 @@
 import * as types from './actionTypes';
+import fetch from 'isomorphic-fetch'
 
 const updateState = (state) => {
   return {

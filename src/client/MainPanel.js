@@ -1,19 +1,47 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { update } from './actionCreators';
 
 import Paper from 'material-ui/lib/paper';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Subheader from 'material-ui/lib/Subheader';
 import RaisedButton from 'material-ui/lib/raised-button';
+/*
+const mapStateToProps = (state, ownProps) => {
+  return {
+    values:
+  }
+}
+
+const MainPanel = connect(
+
+)(Panel)
+
+export default MainPanel
+*/
 
 export default class MainPanel extends Component {
+  componentDidMount() {
+    const { store } = this.context;
+    this.unsubscribe = store.subscribe(() => this.forceUpdate());// ?
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
   render () {
-    const { values, onUpdate } = this.props;
+    const { store } = this.context;
+    const values = store.getState();
 
     return (
       <div>
         <Paper zDepth={2} style={{width: '500px'}}>
-          <RaisedButton label='Update' onClick={onUpdate} />
+          <RaisedButton label='Update' onClick={
+              () => store.dispatch(update())
+            }
+          />
           <List>
             <Subheader>FileList ({values.fileList.length})</Subheader>
             {
@@ -33,7 +61,6 @@ export default class MainPanel extends Component {
   }
 }
 
-MainPanel.propTypes = {
-  values: PropTypes.object.isRequired,
-  onUpdate: PropTypes.func.isRequired,
+MainPanel.contextTypes = {
+  store: PropTypes.object.isRequired
 };

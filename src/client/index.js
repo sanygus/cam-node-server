@@ -1,23 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import reducer from './reducer';
-import { update } from './actionCreators'
 import MainPanel from './MainPanel';
 
-const store = createStore(reducer);
-
-const render = () => {
+//const render = () => {
   ReactDOM.render(
-    <MainPanel
-      values={store.getState()}
-      onUpdate={
-        () => store.dispatch(update())
-      }
-    />,
+    <Provider store={createStore(reducer)}>
+      <MainPanel />
+    </Provider>,
     document.getElementById('main')
   );
-}
+//}
 
-store.subscribe(render);
-render();
+//store.subscribe(render);
+//render();
