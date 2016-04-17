@@ -5,14 +5,9 @@ import { Provider } from 'react-redux';
 import reducer from './reducer';
 import MainPanel from './MainPanel';
 
-//const render = () => {
-  ReactDOM.render(
-    <Provider store={createStore(reducer)}>
-      <MainPanel />
-    </Provider>,
-    document.getElementById('main')
-  );
-//}
-
-//store.subscribe(render);
-//render();
+ReactDOM.render(
+  <Provider store={createStore(reducer)}>
+    <MainPanel />
+  </Provider>,
+  document.getElementById('main')
+);
