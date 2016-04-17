@@ -2,15 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import reducer from './reducer';
+import { update } from './actionCreators'
 import MainPanel from './MainPanel';
-
-// import {UI} from './ui';
-/*
-ReactDOM.render(
-  <UI />,
-  document.getElementById('main')
-);
-*/
 
 const store = createStore(reducer);
 
@@ -19,9 +12,7 @@ const render = () => {
     <MainPanel
       values={store.getState()}
       onUpdate={
-        () => store.dispatch({
-          type: 'UPDATE'
-        })
+        () => store.dispatch(update())
       }
     />,
     document.getElementById('main')

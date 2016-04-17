@@ -1,10 +1,4 @@
-const defaultState = {
-  fileList: [],
-  sensors: {
-    cpuTemp: null,
-    pingTime: null,
-  }
-}
+import * as types from './actionTypes';
 
 const updateState = (state) => {
   return {
@@ -16,9 +10,19 @@ const updateState = (state) => {
   };
 }
 
-export default function reducer (state = defaultState, action) {
+export default function reducer (state, action) {
+  if (state === undefined) {
+    state = {
+      fileList: [],
+      sensors: {
+        cpuTemp: null,
+        pingTime: null,
+      }
+    }
+  }
+
   switch (action.type) {
-    case 'UPDATE':
+    case types.UPDATE:
       return updateState(state);
     default:
       return state;
