@@ -1,1 +1,2 @@
-export const UPDATE = 'UPDATE';
+export const UPDATE_START = 'UPDATE_START';
+export const UPDATE_FINISH = 'UPDATE_FINISH';

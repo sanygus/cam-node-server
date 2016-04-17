@@ -1,13 +1,18 @@
 import * as types from './actionTypes';
-import fetch from 'isomorphic-fetch'
 
-const updateState = (state) => {
+const updateStart = (state) => {
   return {
-    fileList: [...state.fileList, '123', '321'],
-    sensors: {
-      cpuTemp: state.sensors.cpuTemp + 1,
-      pingTime: state.sensors.pingTime + 1,
-    }
+    fileList: state.fileList,
+    sensors: state.sensors,
+    lastUpd: 'loading',
+  };
+}
+
+const updateFinish = (state, data) => {
+  return {
+    fileList: data.fileList,
+    sensors: data.sensors,
+    lastUpd: new Date().toISOString(),
   };
 }
 
@@ -18,13 +23,16 @@ export default function reducer (state, action) {
       sensors: {
         cpuTemp: null,
         pingTime: null,
-      }
+      },
+      lastUpd: 'not yet',
     }
   }
 
   switch (action.type) {
-    case types.UPDATE:
-      return updateState(state);
+    case types.UPDATE_START:
+      return updateStart(state);
+    case types.UPDATE_FINISH:
+      return updateFinish(state, action.data);
     default:
       return state;
   }

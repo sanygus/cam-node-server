@@ -38,7 +38,7 @@ app.get('/data', (request, result) => {
     ],
     (err, results) => {
       result.json({
-        filesList: results[0],
+        fileList: results[0],
         sensors: results[1],
       });
     }
