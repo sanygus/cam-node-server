@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "eslint ./src"
+    "test": "eslint ./src",
+    "start": "./node_modules/.bin/webpack-dev-server --content-base='http://localhost:2930'"
   },
   "repository": {
     "type": "git",
