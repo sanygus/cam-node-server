@@ -4,13 +4,13 @@ import { update } from './actionCreators';
 import Panel from './Panel';
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state /*, ownProps */ ) => {
   return {
     values: state
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch /*, ownProps */ ) => {
   return {
     onClick: () => {
       dispatch(update())
