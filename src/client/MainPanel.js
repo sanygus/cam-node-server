@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { update } from './actionCreators';
-import Panel from './Panel';
+import Panel from './components/Panel';
 
 
 const mapStateToProps = (state /*, ownProps */ ) => {
@@ -12,7 +12,7 @@ const mapStateToProps = (state /*, ownProps */ ) => {
 
 const mapDispatchToProps = (dispatch /*, ownProps */ ) => {
   return {
-    onClick: () => {
+    updateData: () => {
       dispatch(update())
     }
   }
