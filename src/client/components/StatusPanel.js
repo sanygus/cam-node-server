@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react';
 
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
+import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 
 export default class StatusPanel extends Component {
   render () {
-    const { lastUpd, onClickUpdateData } = this.props;
+    const { loading, lastUpd, onClickUpdateData } = this.props;
 
     return (
       <div>
@@ -19,6 +20,7 @@ export default class StatusPanel extends Component {
           floatingLabelText="Update time"
           style={{margin: '20px'}}
         />
+        <RefreshIndicator top={20} left={20} status={ loading ? 'loading' : 'hide' } />
       </div>
     )
   }

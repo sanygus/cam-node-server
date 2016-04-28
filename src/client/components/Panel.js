@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 
 import Paper from 'material-ui/lib/paper';
 import Divider from 'material-ui/lib/divider';
-import Toggle from 'material-ui/lib/toggle';
 import StatusPanel from './StatusPanel.js'
 import FileList from './FileList.js';
-import Sensors from './Sensors.js'
+import Sensors from './Sensors.js';
+import Settings from './Settings';
 
 export default class Panel extends Component {
   render () {
@@ -13,19 +13,14 @@ export default class Panel extends Component {
 
     return (
       <Paper zDepth={2} style={{width: '500px'}}>
-        <StatusPanel lastUpd={values.lastUpd} onClickUpdateData={updateData} />
+        <StatusPanel loading={values.loading} lastUpd={values.lastUpd} onClickUpdateData={updateData} />
         <Divider />
         <FileList files={values.fileList} />
         <Divider />
         <Sensors sensorsValues={values.sensors} />
         <Divider />
-        <Toggle
-          onToggle={saveSettngs}
-          disabled={values.settings.blocked}
-          toggled={values.settings.enablePhoto}
-          label='Enable photo'
-          style={{width: '200px', margin: '30px'}}
-        />
+        <Settings settingsValues={values.settings} settingsSave={saveSettngs} />
+        <Divider />
       </Paper>
     );
   }

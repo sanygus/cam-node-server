@@ -15,8 +15,8 @@ const mapDispatchToProps = (dispatch /*, ownProps */ ) => {
     updateData: () => {
       dispatch(update())
     },
-    saveSettngs: () => {
-      dispatch(save())
+    saveSettngs: (type, value) => {
+      dispatch(save(type, value))
     },
   }
 }

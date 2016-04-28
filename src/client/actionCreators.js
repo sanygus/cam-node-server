@@ -22,10 +22,12 @@ export function update() {
   }
 }
 
-export function save() {
+export function save(typeSetting, valueSetting) {
   return function(dispatch) {
     dispatch({
-      type: types.SAVESETTINGS_START
+      type: types.SAVESETTINGS_START,
+      typeSetting,
+      valueSetting,
     });
     fetch('/settings', {
       method: 'POST',
@@ -34,7 +36,8 @@ export function save() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        param: 'value'
+        type: typeSetting,
+        value: valueSetting,
       })
     })
       .then((response) => {
