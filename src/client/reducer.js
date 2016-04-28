@@ -8,6 +8,8 @@ const updateStart = (state) => {
 
 const updateFinish = (state, data) => {
   return Object.assign({}, state, {
+    fileList: data.fileList,
+    sensors: data.sensors,
     lastUpd: new Date().toISOString()
   });
 }
