@@ -2,6 +2,7 @@
 
 const options = require('./serverOptions');
 const express = require('express');
+const bodyParser = require('body-parser');
 const getWebData = require('./getWebData');
 // const statistics = require('./statistics');
 const log = require('./log');
@@ -20,6 +21,11 @@ app.get('/data', (request, response) => {
     response.json(data);
     log(data);
   });
+});
+
+app.post('/settings', bodyParser.json(), (request, response) => {
+  console.log(request.body);
+  response.json({saved: true});
 });
 
 app.use('/files', express.static(path.resolve(options.filesDir)));

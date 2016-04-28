@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { update } from './actionCreators';
+import { update, save } from './actionCreators';
 import Panel from './components/Panel';
 
 
@@ -14,7 +14,10 @@ const mapDispatchToProps = (dispatch /*, ownProps */ ) => {
   return {
     updateData: () => {
       dispatch(update())
-    }
+    },
+    saveSettngs: () => {
+      dispatch(save())
+    },
   }
 }
 
