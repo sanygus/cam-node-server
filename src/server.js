@@ -1,11 +1,12 @@
-'use strict';
-
 const options = require('./serverOptions');
+const db = require('./db');
 const sensorsHandler = require('./sensorsHandler');
 const fileHandler = require('./fileHandler');
 const statistics = require('./statistics');
 const log = require('./log');
 const io = (require('socket.io'))();
+
+db.init();
 
 io.on('connection', (socket) => {
   log('cam connected');

@@ -1,5 +1,3 @@
-'use strict';
-
 const dateformat = require('dateformat');
 const log = require('./log');
 

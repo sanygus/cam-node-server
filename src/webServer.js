@@ -1,12 +1,11 @@
-'use strict';
-
 const options = require('./serverOptions');
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const getWebData = require('./getWebData');
 // const statistics = require('./statistics');
+const db = require('./db');
 const log = require('./log');
-const path = require('path');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -24,8 +23,12 @@ app.get('/data', (request, response) => {
 });
 
 app.post('/settings', bodyParser.json(), (request, response) => {
-  console.log(request.body);
-  response.json({saved: true});
+  const result = { saved: false };
+  log(request.body);
+  db.saveSettings(/**/(error) => {
+    if (!error) { result.saved = true; }
+    response.json(result);
+  });
 });
 
 app.use('/files', express.static(path.resolve(options.filesDir)));
