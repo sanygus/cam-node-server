@@ -16,7 +16,7 @@ module.exports = function getWebData(callback) {
       (callbackAsync) => {
         sensorsHandler.getSensors( (err, sensors) => {
           if (err) { throw err; }
-          callbackAsync(null, sensors[sensors.length - 1] || {});
+          callbackAsync(null, sensors || []);
         });
       },
     ],

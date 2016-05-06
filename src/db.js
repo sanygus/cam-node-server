@@ -5,10 +5,12 @@ const path = require('path');
 let db;
 
 module.exports.saveSettings = (/*idDev, type, option, value, */ callback) => {
+  // save to db
   callback(null);
 };
 
 module.exports.getSettings = (idDev) => {
+  // load from db
   callback(null);
 };
 

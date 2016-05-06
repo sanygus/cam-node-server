@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+import Subheader from 'material-ui/lib/Subheader';
 import Toggle from 'material-ui/lib/toggle';
 
 export default class Settings extends Component {
@@ -8,6 +9,7 @@ export default class Settings extends Component {
 
     return (
       <div>
+        <Subheader>Settings</Subheader>
         <Toggle
           disabled={settingsValues.blocked}
           toggled={settingsValues.enablePhoto}

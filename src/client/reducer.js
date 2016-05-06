@@ -35,10 +35,10 @@ export default function reducer (state, action) {
   if (state === undefined) {
     state = {
       fileList: [],
-      sensors: {
+      sensors: [/*{
         cpuTemp: null,
         pingTime: null,
-      },
+      }*/],
       loading: false,
       lastUpd: 'not yet',
       settings: {
