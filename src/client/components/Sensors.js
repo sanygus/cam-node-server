@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import Subheader from 'material-ui/lib/Subheader';
-import { Line as Chart } from 'react-chartjs';// => react d3
+import { Line as Chart } from 'react-chartjs';
 
 export default class Sensors extends Component {
   render () {
@@ -28,12 +28,11 @@ export default class Sensors extends Component {
       chartData.datasets[0].data.push(value.cputemp);
       chartData.datasets[1].data.push(value.pingtime);
     });
-    console.log(chartData);
 
     return (
       <div>
-        <Subheader>Sensors</Subheader>
-        <Chart data={chartData} width='500' height='500' />
+        <Subheader>Sensors (chart-js)</Subheader>
+        <Chart data={chartData} width='500' height='300' />
       </div>
     )
   }
