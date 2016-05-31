@@ -12,16 +12,16 @@ export default class Panel extends Component {
     const { values, updateData, saveSettngs } = this.props;
 
     return (
-      <Paper zDepth={2} style={{width: '500px'}}>
-        <StatusPanel loading={values.loading} lastUpd={values.lastUpd} onClickUpdateData={updateData} />
-        <Divider />
-        <FileList files={values.fileList} />
-        <Divider />
-        <Sensors sensorsValues={values.sensors} />
-        <Divider />
-        <Settings settingsValues={values.settings} settingsSave={saveSettngs} />
-        <Divider />
-      </Paper>
+        <Paper zDepth={2} style={{width: '1000px'}}>
+          <StatusPanel statusCam={values.statusCam} loading={values.loading} lastUpd={values.lastUpd} updateData={updateData} />
+          <Divider />
+          <Sensors sensorsValues={values.sensors} />
+          <Divider />
+          <Settings sensorsValues={values.sensors} settingsValues={values.settings} settingsSave={saveSettngs} />
+          <Divider />
+          <FileList files={values.fileList} />
+          <Divider />
+        </Paper>
     );
   }
 }

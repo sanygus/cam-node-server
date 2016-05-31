@@ -11,8 +11,9 @@ const updateFinish = (state, data) => {
   return Object.assign({}, state, {
     fileList: data.fileList,
     sensors: data.sensors,
+    statusCam: data.statusCam,
     loading: false,
-    lastUpd: new Date().toISOString()
+    lastUpd: new Date().toISOString().replace('T', ' ').replace('Z', ''),
   });
 }
 
@@ -35,11 +36,15 @@ export default function reducer (state, action) {
   if (state === undefined) {
     state = {
       fileList: [],
-      sensors: [],
+      sensors: { powers: [] },
+      statusCam: { online: false, onlineDate: null },
       loading: false,
       lastUpd: 'not yet',
+      online: false,
+      lastChange: 'not yet',
       settings: {
-        blocked: false,
+        mode: 'photo',
+        blocked: true,
         enablePhoto: false,
         qualityPhoto: 70,
         enableVideo: true,

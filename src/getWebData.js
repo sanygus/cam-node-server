@@ -3,6 +3,7 @@
 const async = require('async');
 const getFileList = require('./getFileList');
 const sensorsHandler = require('./sensorsHandler');
+const statistics = require('./statistics');
 
 module.exports = function getWebData(callback) {
   async.parallel(
@@ -16,7 +17,13 @@ module.exports = function getWebData(callback) {
       (callbackAsync) => {
         sensorsHandler.getSensors( (err, sensors) => {
           if (err) { throw err; }
-          callbackAsync(null, sensors || []);
+          callbackAsync(null, sensors);
+        });
+      },
+      (callbackAsync) => {
+        statistics.getStatus( (err, status) => {
+          if (err) { throw err; }
+          callbackAsync(null, status);
         });
       },
     ],
@@ -24,6 +31,7 @@ module.exports = function getWebData(callback) {
       callback({
         fileList: results[0],
         sensors: results[1],
+        statusCam: results[2],
       });
     }
   );

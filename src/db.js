@@ -3,15 +3,18 @@ const DataStore = require('nedb');
 const path = require('path');
 
 let db;
+let mode = 'photo';
 
-module.exports.saveSettings = (/*idDev, type, option, value, */ callback) => {
+module.exports.saveSettings = (/*idDev, */type, option, value, callback) => {
   // save to db
+  if (type === 'mode') { mode = value }
+  console.log(mode);
   callback(null);
 };
 
-module.exports.getSettings = (idDev) => {
+module.exports.getSettings = (idDev, callback) => {
   // load from db
-  callback(null);
+  callback(null, mode);
 };
 
 module.exports.init = () => {

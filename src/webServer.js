@@ -18,14 +18,14 @@ app.get('/', (request, response) => {
 app.get('/data', (request, response) => {
   getWebData( (data) => {
     response.json(data);
-    log(data);
+    console.log(data);
   });
 });
 
 app.post('/settings', bodyParser.json(), (request, response) => {
   const result = { saved: false };
   log(request.body);
-  db.saveSettings(/**/(error) => {
+  db.saveSettings(request.body.type, 0, request.body.value, (error) => {
     if (!error) { result.saved = true; }
     response.json(result);
   });

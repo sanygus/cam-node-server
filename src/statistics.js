@@ -16,6 +16,10 @@ module.exports.setStatus = function setStatus(status) {
   onlineDate = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
 };
 
+module.exports.getStatus = function getStatus(callback) {
+  callback(null, { online, onlineDate });
+};
+
 module.exports.statisticsHandler = function statisticsHandler(data) {
   log(data);
   if ((data.hasOwnProperty('size')) && (data.hasOwnProperty('time'))) {

@@ -12,8 +12,10 @@ io.on('connection', (socket) => {
   log('cam connected');
   statistics.setStatus(true);
 
-  socket.on('sensors', (data) => {
-    sensorsHandler.giveSensors(data);
+  socket.on('sensors', (data, complete) => {
+    sensorsHandler.giveSensors(data, (response) => {
+      complete(response);
+    });
   });
 
   socket.on('file', (data, complete) => {

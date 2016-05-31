@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { update, save } from './actionCreators';
 import Panel from './components/Panel';
 
-
 const mapStateToProps = (state /*, ownProps */ ) => {
   return {
-    values: state
+    values: state,
   }
 }
 
