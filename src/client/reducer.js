@@ -14,6 +14,7 @@ const updateFinish = (state, data) => {
     statusCam: data.statusCam,
     loading: false,
     lastUpd: new Date().toISOString().replace('T', ' ').replace('Z', ''),
+    settings: Object.assign({}, state.settings, { mode: data.mode }),
   });
 }
 
@@ -43,7 +44,7 @@ export default function reducer (state, action) {
       online: false,
       lastChange: 'not yet',
       settings: {
-        mode: 'photo',
+        mode: [],
         blocked: true,
         enablePhoto: false,
         qualityPhoto: 70,

@@ -10,7 +10,7 @@ export default class StatusPanel extends Component {
 
   componentDidMount() {
     const { updateData } = this.props;
-    setInterval(updateData, 1000);
+    setInterval(updateData, 2000);
   }
 
   render () {

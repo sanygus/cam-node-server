@@ -20,7 +20,7 @@ module.exports = function getFileList(callback) {
       },
       (errMap, myFiles) => {
         if (errMap) { return callback(errMap); }
-        callback(null, myFiles);
+        callback(null, myFiles.reverse());
       }
     );
   });

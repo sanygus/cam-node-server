@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 
 import Paper from 'material-ui/lib/paper';
 import Divider from 'material-ui/lib/divider';
-import StatusPanel from './StatusPanel.js'
-import FileList from './FileList.js';
-import Sensors from './Sensors.js';
+import StatusPanel from './StatusPanel'
+import FileList from './FileList';
+import Sensors from './Sensors';
 import Settings from './Settings';
 
 export default class Panel extends Component {

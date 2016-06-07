@@ -20,7 +20,6 @@ module.exports.getSensors = function getSensors(callback) {
     let sensorsLength = 10;
     if(sensors.length > 10) { sensorsLength = sensors.length }
     result.powers = sensors.slice(sensorsLength - 10, sensors.length).map((sensor) => { return sensor.power; });
-    console.log(sensors.length, sensorsLength);
   }
   callback(null, result);
 };

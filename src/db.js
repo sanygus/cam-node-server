@@ -1,20 +1,27 @@
 const options = require('./serverOptions');
+const lifeCycle = require('./lifeCycle');
 const DataStore = require('nedb');
 const path = require('path');
 
 let db;
-let mode = 'photo';
 
 module.exports.saveSettings = (/*idDev, */type, option, value, callback) => {
   // save to db
-  if (type === 'mode') { mode = value }
-  console.log(mode);
-  callback(null);
+  /*if (type === 'mode') { mode = value }
+  console.log(mode);*/
+  if (type === 'mode') {
+    lifeCycle.setMode(value, () => {
+      callback(null);
+    });
+  }
+  console.log(value);
 };
 
 module.exports.getSettings = (idDev, callback) => {
   // load from db
-  callback(null, mode);
+  lifeCycle.getMode((err, mode) => {
+    callback(null, { mode });
+  });
 };
 
 module.exports.init = () => {
