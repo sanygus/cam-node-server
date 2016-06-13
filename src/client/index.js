@@ -1,19 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { render } from 'react-dom';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import reducer from './reducer';
-import MainPanel from './MainPanel';
+import status from './reducers/status';
+import sensors from './reducers/sensors';
+import files from './reducers/files';
+import App from './App'
 
-ReactDOM.render(
+render(
   <Provider store={
     createStore(
-      reducer,
+      combineReducers({
+        status,
+        sensors,
+        files
+      }),
       applyMiddleware(thunk)
     )
   }>
-    <MainPanel />
+    <App />
   </Provider>,
   document.getElementById('main')
-);
+)

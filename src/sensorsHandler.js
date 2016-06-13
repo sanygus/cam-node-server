@@ -19,7 +19,12 @@ module.exports.getSensors = function getSensors(callback) {
     result = sensors[sensors.length - 1];
     let sensorsLength = 10;
     if(sensors.length > 10) { sensorsLength = sensors.length }
-    result.powers = sensors.slice(sensorsLength - 10, sensors.length).map((sensor) => { return sensor.power; });
+    result.powers = sensors.slice(sensorsLength - 10, sensors.length).map((sensor) => {
+      return {
+        power: sensor.power,
+        date: sensor.date
+      }
+    });
   }
   callback(null, result);
 };
