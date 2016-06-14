@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as sensorsActions from '../actions/sensors';
 
 import { Line as Chart } from 'react-chartjs';
 import Subheader from 'material-ui/lib/Subheader';
@@ -76,6 +75,5 @@ Sensors.PropTypes = {
 }
 
 export default connect(
-  state => ({ sensors: state.sensors }),
-  dispatch => ({ actions: bindActionCreators(sensorsActions, dispatch) })
+  state => ({ sensors: state.sensors })
 )(Sensors)

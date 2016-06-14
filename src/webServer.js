@@ -18,7 +18,6 @@ app.get('/', (request, response) => {
 app.get('/data', (request, response) => {
   getWebData( (data) => {
     response.json(data);
-    console.log(data);
   });
 });
 

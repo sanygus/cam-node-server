@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { update as updateAction } from './actions/update';
 import Status from './components/Status';
 import Sensors from './components/Sensors';
+import Settings from './components/Settings';
 import FileList from './components/FileList';
 import Paper from 'material-ui/lib/paper';
 import Divider from 'material-ui/lib/divider';
@@ -18,6 +19,8 @@ class App extends Component {
         <Status />
         <Divider />
         <Sensors />
+        <Divider />
+        <Settings />
         <Divider />
         <FileList />
       </Paper>

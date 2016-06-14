@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as filesActions from '../actions/files';
 
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
@@ -49,6 +48,6 @@ FileList.PropTypes = {
 }
 
 export default connect(
-  state => ({ files: state.files }),
-  dispatch => ({ actions: bindActionCreators(filesActions, dispatch) })
+  state => ({ files: state.files })
+  //dispatch => ({ actions: bindActionCreators(filesActions, dispatch) })
 )(FileList)

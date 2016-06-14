@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as statusActions from '../actions/status';
 
 import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -29,6 +28,5 @@ class Status extends Component {
 
 
 export default connect(
-  state => ({ status: state.status }),
-  dispatch => ({ actions: bindActionCreators(statusActions, dispatch) })
+  state => ({ status: state.status })
 )(Status)

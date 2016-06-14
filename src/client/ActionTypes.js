@@ -4,3 +4,4 @@ export const UPDATE_CAM_STATUS = 'UPDATE_CAM_STATUS';
 export const UPDATE_SENSORS = 'UPDATE_SENSORS';
 export const UPDATE_FILES = 'UPDATE_FILES';
 export const DELETE_FILE = 'DELETE_FILE';
+export const UPDATE_MODE = 'UPDATE_MODE';
