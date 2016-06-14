@@ -15,6 +15,9 @@ import VideoCamIcon from 'material-ui/lib/svg-icons/av/videocam';
 import SleepIcon from 'material-ui/lib/svg-icons/maps/local-hotel';
 import NothingIcon from 'material-ui/lib/svg-icons/content/block';
 import SelectIcon from 'material-ui/lib/svg-icons/action/touch-app';
+import ArrowUpIcon from 'material-ui/lib/svg-icons/navigation/expand-less';
+import ArrowDownIcon from 'material-ui/lib/svg-icons/navigation/expand-more';
+import DeleteIcon from 'material-ui/lib/svg-icons/navigation/close';
 import TextField from 'material-ui/lib/text-field';
 import injectTapEventPlugin from 'react-tap-event-plugin/src/injectTapEventPlugin';
 injectTapEventPlugin();
@@ -52,6 +55,29 @@ class Settings extends Component {
     }
   }
 
+  moveMode(index, index2) {
+    let tempMode;
+    let tempElem;
+    tempMode = this.state.mode.slice();
+    if (index2 < 0) { index2 += tempMode.length}
+    if (index2 > (tempMode.length - 1)) { index2 -= tempMode.length}
+    tempElem = tempMode[index2];
+    tempMode[index2] = tempMode[index];
+    tempMode[index] = tempElem;
+    this.setState({
+      mode: tempMode
+    })
+  }
+
+  deleteMode(index) {
+    let tempMode;
+    tempMode = this.state.mode.slice();
+    tempMode.splice(index, 1);
+    this.setState({
+      mode: tempMode
+    })
+  }
+
   copyMode() {
     this.setState({
       mode: this.props.settings.mode.slice()
@@ -73,7 +99,7 @@ class Settings extends Component {
     this.clearMode();
   }
 
-  modeItemRender(modeItem, key) {
+  modeItemRender(modeItem, key, arrowButtons = false) {
     let text = '';
     let icon = '';
     switch (modeItem.type) {
@@ -88,6 +114,15 @@ class Settings extends Component {
         <ListItem
           primaryText={`${text} (${Math.floor(modeItem.duration / 3600)}h ${Math.floor((modeItem.duration % 3600) / 60)}m ${(modeItem.duration % 60).toFixed(0)}s)`}
           leftIcon={icon}
+          rightIconButton={
+            arrowButtons ? 
+              <div>
+                <Button onMouseUp={this.moveMode.bind(this, key, key - 1)} icon={<ArrowUpIcon />} style={{margin: 5}} />
+                <Button onMouseUp={this.moveMode.bind(this, key, key + 1)} icon={<ArrowDownIcon />} style={{margin: 5}} />
+                <Button onMouseUp={this.deleteMode.bind(this, key)} icon={<DeleteIcon />} style={{margin: 5}} />
+              </div>
+            : null 
+          }
         />
         <Divider />
       </div>
@@ -102,13 +137,21 @@ class Settings extends Component {
         <div style={{display: 'inline-block', margin: '30px', verticalAlign: 'top'}}>
           <Subheader>Current</Subheader>
           <List style={{width: '300px'}}>
-            { settings.mode.map(this.modeItemRender) }
+          {
+            settings.mode.map((modeItem, key) => (
+              this.modeItemRender(modeItem, key, false)
+            )) 
+          }
           </List>
         </div>
         <div style={{display: 'inline-block', margin: '30px', verticalAlign: 'top'}}>
           <Subheader>New</Subheader>
-          <List style={{width: '300px'}}>
-            { this.state.mode.map(this.modeItemRender) }
+          <List style={{width: '530px'}}>
+            {
+              this.state.mode.map((modeItem, key) => (
+                this.modeItemRender(modeItem, key, true)
+              )) 
+            }
           </List>
           <div>
             <SelectField value={this.state.selectedMode} onChange={this.selectModeHandle.bind(this)} style={{width: 150, display: 'inline-block'}}>
