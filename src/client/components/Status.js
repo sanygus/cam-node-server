@@ -23,9 +23,7 @@ class Status extends Component {
       </div>
     )
   }
-
 }
-
 
 export default connect(
   state => ({ status: state.status })

@@ -85,7 +85,10 @@ class Settings extends Component {
     }; 
     return (
       <div key={key} >
-        <ListItem primaryText={`${text} (${Math.floor(modeItem.duration / 3600)}h ${Math.floor((modeItem.duration % 3600) / 60)}m ${(modeItem.duration % 60).toFixed(0)}s)`} leftIcon={icon} />
+        <ListItem
+          primaryText={`${text} (${Math.floor(modeItem.duration / 3600)}h ${Math.floor((modeItem.duration % 3600) / 60)}m ${(modeItem.duration % 60).toFixed(0)}s)`}
+          leftIcon={icon}
+        />
         <Divider />
       </div>
     )
@@ -120,7 +123,7 @@ class Settings extends Component {
             <Button label='Add' onMouseUp={this.addOneMode.bind(this)} style={{margin: 10}} />
           </div>
           <div>
-            <Button label='Send' onMouseUp={this.sendMode.bind(this)} primary={this.state.mode.length > 0} style={{margin: 10}} />
+            <Button label='Send' onMouseUp={this.sendMode.bind(this)} disabled={this.state.mode.length === 0} primary={this.state.mode.length > 0} style={{margin: 10}} />
             <Button label='Copy' onMouseUp={this.copyMode.bind(this)} disabled={settings.mode.length === 0} style={{margin: 10}} />
             <Button label='Clear' onMouseUp={this.clearMode.bind(this)} style={{margin: 10}} />
           </div>
