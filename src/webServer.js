@@ -31,7 +31,7 @@ app.post('/settings', bodyParser.json(), (request, response) => {
 });
 
 app.use('/files', express.static(path.resolve(options.filesDir)));
-// app.use('/assets', express.static(path.resolve(options.assetsWebDir)));
+app.use('/assets', express.static(path.resolve(options.assetsWebDir)));
 
 app.listen(options.webPort);
 log(`Webserver is listening on ${options.webPort}`);
