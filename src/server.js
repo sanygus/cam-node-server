@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('file', (data, complete) => {
-    fileHandler(data);
+    fileHandler.fileSaver(data);
     complete();
   });
 
@@ -35,4 +35,5 @@ io.on('connection', (socket) => {
 });
 
 io.listen(options.socketPort);
+fileHandler.checkFilesDir();
 log(`server is listening on port ${options.socketPort}`);

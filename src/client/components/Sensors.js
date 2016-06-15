@@ -30,8 +30,7 @@ class Sensors extends Component {
       return (
         <div>
           <Subheader>Power</Subheader>
-          <Chart data={chartData} width='1000' height='300' />
-          <div style={{position: 'absolute', top: '20px', left: '600px'}}>
+          <div style={{position: 'absolute', top: '5px', left: '600px'}}>
             <Subheader>Last values</Subheader>
             <div>
               <List>
@@ -47,7 +46,11 @@ class Sensors extends Component {
                 <ListItem primaryText={`date: ${sensors.date}`} />
               </List>
             </div>
+            <div>
+              Estimated time work in the <b>current</b> mode {Math.floor(sensors.ost / 86400)}d {Math.floor((sensors.ost % 86400) / 3600)}h {Math.floor((sensors.ost % 3600) / 60)}m {(sensors.ost % 60).toFixed(1)}s
+            </div>
           </div>
+          <Chart data={chartData} width='960' height='300' />
         </div>
       )
     } else {

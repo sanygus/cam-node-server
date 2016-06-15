@@ -11,8 +11,8 @@ export const update = () => {
       .then(response => response.json())
       .then(data => {
         dispatch(statusActions.updateCamStatus(data.statusCam));
-        dispatch(sensorsActions.updateSensors(data.sensors))
-        dispatch(settingsActions.updateMode(data.mode))
+        dispatch(sensorsActions.updateSensors(data.sensors));
+        dispatch(settingsActions.updateMode(data.mode));
         dispatch(filesActions.updateFiles(data.fileList));
         dispatch(statusActions.endUpdate());
         setTimeout(() => {
