@@ -15,7 +15,7 @@ class App extends Component {
   }
   render() {
     return (
-      <Paper zDepth={2}>
+      <Paper zDepth={2} style={{width: 960, margin: '0 auto'}}>
         <Status />
         <Divider />
         <Sensors />

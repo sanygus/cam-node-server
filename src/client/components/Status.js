@@ -15,7 +15,7 @@ class Status extends Component {
     return (
       <div>
         <RefreshIndicator top={35} left={20} status={ status.loading ? 'loading' : 'hide' } />
-        <Paper zDepth={2} style={{width: 260, height: 170, margin: 30, padding: 10}}>
+        <Paper zDepth={2} style={{width: 260, height: 170, margin: '10px 30px', padding: 10}}>
           <p>Camera status: </p>
           <Toggle toggled={status.statusCam.online} style={{color: 'red'}} />
           <p>{status.statusCam.online ? 'Camera connected' : 'Camera NOT connected'} {status.statusCam.onlineDate ? `since ${status.statusCam.onlineDate}` : ''}</p>
