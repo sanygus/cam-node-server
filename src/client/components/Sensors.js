@@ -28,9 +28,9 @@ class Sensors extends Component {
         chartData.labels.push(value.date);
       });
       return (
-        <div>
+        <div style={{position: 'relative'}}>
           <Subheader>Power</Subheader>
-          <div style={{position: 'absolute', top: '5px', left: '600px'}}>
+          <div style={{position: 'absolute', top: '-200px', left: '400px'}}>
             <Subheader>Last values</Subheader>
             <div>
               <List>
