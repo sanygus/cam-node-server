@@ -7,14 +7,12 @@ let db;
 
 module.exports.saveSettings = (/*idDev, */type, option, value, callback) => {
   // save to db
-  /*if (type === 'mode') { mode = value }
-  console.log(mode);*/
   if (type === 'mode') {
     lifeCycle.setMode(value, () => {
       callback(null);
     });
   }
-  console.log(value);
+  //console.log(value);
 };
 
 module.exports.getSettings = (idDev, callback) => {

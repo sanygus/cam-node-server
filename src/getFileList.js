@@ -6,7 +6,10 @@ const async = require('async');
 const path = require('path');
 
 module.exports = function getFileList(callback) {
-  fs.readdir(path.resolve(options.filesDir), (err, files) => {
+  fs.readdir(path.resolve(options.filesDir), (err, allFiles) => {
+    const files = allFiles.filter((fileName) => {
+      return /.+\.(jpg|mp4)/.test(fileName);
+    });
     async.map(
       files,
       (file, done) => {

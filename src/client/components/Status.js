@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import RefreshIndicator from 'material-ui/lib/refresh-indicator';
-import RaisedButton from 'material-ui/lib/raised-button';
-import TextField from 'material-ui/lib/text-field';
 import Toggle from 'material-ui/lib/toggle';
 import Paper from 'material-ui/lib/paper';
 
