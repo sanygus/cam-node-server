@@ -15,14 +15,22 @@ class FileList extends Component {
   constructor() {
     super();
     this.state = {
-      viewFile: null
+      viewFiles: null
     }
   }
 
-  view(filePath) {
+  view(filesPath) { //filesPath is string (one file) or array of string (several files)
     this.setState({
-      viewFile: filePath
+      viewFiles: filesPath
     });
+  }
+
+  viewAllVideo() {
+    this.view(this.props.files.filter((file) => {
+      return (file.name.indexOf('.mp4') > 0)
+    }).map((file) => {
+      return '/files/' + file.name
+    }));
   }
 
   render() {
@@ -34,17 +42,17 @@ class FileList extends Component {
 
     return (
       <List>
-        <FileViewer filePath={this.state.viewFile} closeHandler={this.view.bind(this, null)} />
+        <FileViewer filesPath={this.state.viewFiles} closeHandler={this.view.bind(this, null)} />
         <Subheader>FileList ({files.length})</Subheader>
+        <div><FlatButton label="View all videos" onMouseUp={this.viewAllVideo.bind(this)} /></div>
         {
           files.map( (value, key) => {
             const avatar = (value.name.indexOf('.mp4') > 0) ? <Avatar icon={<PlayIcon />} /> : <Avatar src={`/files/${value.name}`} />;
             return (
               <FlatButton
                 key={key}
-                linkButton={true}
                 onMouseUp={this.view.bind(this, `/files/${value.name}`)}
-                style={{margin: '0 20px'}}
+                style={{width: 280, margin: '0 20px'}}
               >
                 <ListItem
                   leftAvatar={avatar}
