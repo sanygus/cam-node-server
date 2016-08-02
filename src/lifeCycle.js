@@ -1,10 +1,13 @@
-let mode = [];
+const settings = {
+  mode: [],
+  RTV: false,
+}
 
-module.exports.getMode = (callback) => {
-  callback(null, mode);
+module.exports.getSettings = (callback) => {
+  callback(null, settings);
 };
 
-module.exports.setMode = (newMode, callback) => {
-  mode = newMode;
+module.exports.setSetting = (type, value, callback) => {
+  settings[type] = value;
   callback(null);
 };

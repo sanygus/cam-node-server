@@ -10,9 +10,10 @@ export const update = () => {
     fetch('/data')
       .then(response => response.json())
       .then(data => {
+        //console.log(data.settings);
         dispatch(statusActions.updateCamStatus(data.statusCam));
         dispatch(sensorsActions.updateSensors(data.sensors));
-        dispatch(settingsActions.updateMode(data.mode));
+        dispatch(settingsActions.updateSettings(data.settings));
         dispatch(filesActions.updateFiles(data.fileList));
         dispatch(statusActions.endUpdate());
         setTimeout(() => {

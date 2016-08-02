@@ -1,7 +1,7 @@
 'use strict';
 
 const async = require('async');
-const lifeCycle = require('./lifeCycle');
+const db = require('./db');
 const getFileList = require('./getFileList');
 const sensorsHandler = require('./sensorsHandler');
 const statistics = require('./statistics');
@@ -28,7 +28,7 @@ module.exports = function getWebData(callback) {
         });
       },
       (callbackAsync) => {
-        lifeCycle.getMode(callbackAsync);
+        db.getSettings(null, callbackAsync);
       },
     ],
     (err, results) => {
@@ -36,7 +36,7 @@ module.exports = function getWebData(callback) {
         fileList: results[0],
         sensors: results[1],
         statusCam: results[2],
-        mode: results[3],
+        settings: results[3]
       });
     }
   );

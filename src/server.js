@@ -13,9 +13,10 @@ io.on('connection', (socket) => {
   statistics.setStatus(true);
 
   socket.on('sensors', (data, complete) => {
-    sensorsHandler.giveSensors(data, (response) => {
-      complete(response);
-    });
+    sensorsHandler.giveSensors(data);
+    db.getSettings(null, (err, settings) => {
+      complete(settings);
+    })
   });
 
   socket.on('file', (data, complete) => {

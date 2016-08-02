@@ -24,7 +24,7 @@ app.get('/data', (request, response) => {
 app.post('/settings', bodyParser.json(), (request, response) => {
   const result = { saved: false };
   log(request.body);
-  db.saveSettings(request.body.type, 0, request.body.value, (error) => {
+  db.saveSettings(request.body.type, null, request.body.value, (error) => {
     if (!error) { result.saved = true; }
     response.json(result);
   });

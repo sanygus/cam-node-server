@@ -7,19 +7,15 @@ let db;
 
 module.exports.saveSettings = (/*idDev, */type, option, value, callback) => {
   // save to db
-  if (type === 'mode') {
-    lifeCycle.setMode(value, () => {
-      callback(null);
-    });
-  }
+  lifeCycle.setSetting(type, value, () => {
+    callback(null);
+  })
   //console.log(value);
 };
 
 module.exports.getSettings = (idDev, callback) => {
   // load from db
-  lifeCycle.getMode((err, mode) => {
-    callback(null, { mode });
-  });
+  lifeCycle.getSettings(callback);
 };
 
 module.exports.init = () => {

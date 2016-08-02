@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { saveSettings as saveSettinsAction } from '../actions/saveSettings';
+import { saveSetting as saveSettingAction } from '../actions/saveSetting';
 
 import Subheader from 'material-ui/lib/Subheader';
 import Button from 'material-ui/lib/raised-button';
@@ -19,6 +19,7 @@ import ArrowUpIcon from 'material-ui/lib/svg-icons/navigation/expand-less';
 import ArrowDownIcon from 'material-ui/lib/svg-icons/navigation/expand-more';
 import DeleteIcon from 'material-ui/lib/svg-icons/navigation/close';
 import TextField from 'material-ui/lib/text-field';
+import Toggle from 'material-ui/lib/toggle';
 import injectTapEventPlugin from 'react-tap-event-plugin/src/injectTapEventPlugin';
 injectTapEventPlugin();
 
@@ -95,8 +96,12 @@ class Settings extends Component {
   }
 
   sendMode() {
-    this.props.dispatch(saveSettinsAction(this.state.mode))
+    this.props.dispatch(saveSettingAction('mode', this.state.mode))
     this.clearMode();
+  }
+
+  toggleRealTimeVideo(event, toggle) {
+    this.props.dispatch(saveSettingAction('RTV', !this.props.settings.RTV))
   }
 
   modeItemRender(modeItem, key, arrowButtons = false) {
@@ -123,6 +128,7 @@ class Settings extends Component {
               </div>
             : null 
           }
+          style={this.props.settings.RTV ? {color: '#999'} : {}}
         />
         <Divider />
       </div>
@@ -134,6 +140,9 @@ class Settings extends Component {
 
     return (
       <div>
+        <div style={{textAlign: 'right', margin: '30px 30px -50px 0'}}>
+          <Toggle label="RealTime Video" toggled={settings.RTV} onToggle={this.toggleRealTimeVideo.bind(this)} />
+        </div>
         <div style={{display: 'inline-block', margin: '30px', verticalAlign: 'top'}}>
           <Subheader>Current</Subheader>
           <List style={{width: '300px'}}>

@@ -2,9 +2,10 @@ import * as statusActions from './status'
 import * as settingsActions from './settings'
 import fetch from 'isomorphic-fetch'
 
-export const saveSettings = (mode) => {
+export const saveSetting = (type, value) => {
   return (dispatch, getState) => {
-    dispatch(statusActions.startUpdate())
+    dispatch(statusActions.startUpdate());
+    dispatch(settingsActions.updateSetting(type, value));
     fetch('/settings', {
       method: 'POST',
       headers: {
@@ -12,14 +13,13 @@ export const saveSettings = (mode) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        type: 'mode',
-        value: mode,
+        type,
+        value,
       })
     })
       .then(response => response.json())
       .then((data) => {
         console.log(data);
-        dispatch(settingsActions.updateMode(mode))
         dispatch(statusActions.endUpdate());
       });
 

@@ -1,16 +1,10 @@
-'use strict';
-
 const log = require('./log');
-const db = require('./db');
 
 const sensors = [];
 
-module.exports.giveSensors = function giveSensors(values, callback) {
-  log(values);
+module.exports.giveSensors = function giveSensors(values) {
+  //log(values);
   sensors.push(values);
-  db.getSettings(null, (err, settings) => {
-    callback(settings);
-  })
 };
 
 module.exports.getSensors = function getSensors(callback) {
