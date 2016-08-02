@@ -22,7 +22,5 @@ export const saveSetting = (type, value) => {
         console.log(data);
         dispatch(statusActions.endUpdate());
       });
-
-
   }
 }
