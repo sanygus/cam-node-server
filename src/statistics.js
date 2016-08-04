@@ -3,6 +3,7 @@ const log = require('./log');
 
 let online = false;
 let onlineDate = null;
+let RTVon = false;
 let bytes = 0;
 let files = 0;
 let time = 0; // ms
@@ -16,8 +17,12 @@ module.exports.setStatus = function setStatus(status) {
   onlineDate = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
 };
 
+module.exports.setRTVstatus = (status) => {
+  RTVon = status;
+};
+
 module.exports.getStatus = function getStatus(callback) {
-  callback(null, { online, onlineDate });
+  callback(null, { online, onlineDate, RTVstatus: RTVon });
 };
 
 module.exports.statisticsHandler = function statisticsHandler(data) {

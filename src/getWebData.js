@@ -10,22 +10,13 @@ module.exports = function getWebData(callback) {
   async.parallel(
     [
       (callbackAsync) => {
-        getFileList((err, files) => {
-          if (err) { throw err; }
-          callbackAsync(null, files);
-        });
+        getFileList(callbackAsync);
       },
       (callbackAsync) => {
-        sensorsHandler.getSensors((err, sensors) => {
-          if (err) { throw err; }
-          callbackAsync(null, sensors);
-        });
+        sensorsHandler.getSensors(callbackAsync);
       },
       (callbackAsync) => {
-        statistics.getStatus((err, status) => {
-          if (err) { throw err; }
-          callbackAsync(null, status);
-        });
+        statistics.getStatus(callbackAsync);
       },
       (callbackAsync) => {
         db.getSettings(null, callbackAsync);

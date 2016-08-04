@@ -12,6 +12,7 @@ export const updateCamStatus = (statusCam) => {
   return {
     type: UPDATE_CAM_STATUS,
     online: statusCam.online,
-    onlineDate: statusCam.onlineDate
+    onlineDate: statusCam.onlineDate,
+    RTVstatus: statusCam.RTVstatus,
   }
 }

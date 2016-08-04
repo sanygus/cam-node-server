@@ -2,7 +2,7 @@ import { START_UPDATE, END_UPDATE, UPDATE_CAM_STATUS } from '../ActionTypes.js'
 
 const initState = {
   loading: false,
-  statusCam: { online: false, onlineDate: null }
+  statusCam: { online: false, onlineDate: null, RTVstatus: false, }
 }
 
 export default function status(state = initState, action) {
@@ -17,7 +17,7 @@ export default function status(state = initState, action) {
       });
     case UPDATE_CAM_STATUS:
       return Object.assign({}, state, {
-        statusCam: { online: action.online, onlineDate: action.onlineDate }
+        statusCam: { online: action.online, onlineDate: action.onlineDate, RTVstatus: action.RTVstatus }
       });
     default: return state
   }

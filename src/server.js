@@ -29,9 +29,15 @@ io.on('connection', (socket) => {
     complete();
   });
 
+  socket.on('RTVstatus', (data, callback) => {
+    statistics.setRTVstatus(data);
+    callback(null);
+  });
+
   socket.on('disconnect', () => {
     log('cam disconnected');
     statistics.setStatus(false);
+    statistics.setRTVstatus(false);
   });
 });
 
