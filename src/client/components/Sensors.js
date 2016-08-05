@@ -50,7 +50,7 @@ class Sensors extends Component {
               Estimated time work in the <b>current</b> mode {Math.floor(sensors.ost / 86400)}d {Math.floor((sensors.ost % 86400) / 3600)}h {Math.floor((sensors.ost % 3600) / 60)}m {(sensors.ost % 60).toFixed(1)}s
             </div>
           </div>
-          <Chart data={chartData} width='960' height='300' />
+          <Chart data={chartData} width='960' height='200' />
         </div>
       )
     } else {

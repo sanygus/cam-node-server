@@ -141,7 +141,7 @@ class Settings extends Component {
     return (
       <div>
         <div style={{textAlign: 'right', margin: '30px 30px -50px 0'}}>
-          <Toggle label="RealTime Video" toggled={settings.RTV} onToggle={this.toggleRealTimeVideo.bind(this)} />
+          <Toggle label="RealTime Video" toggled={settings.RTV} onToggle={this.toggleRealTimeVideo.bind(this)} disabled={true} />
         </div>
         <div style={{display: 'inline-block', margin: '30px', verticalAlign: 'top'}}>
           <Subheader>Current</Subheader>
