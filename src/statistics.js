@@ -2,6 +2,7 @@ const dateformat = require('dateformat');
 const log = require('./log');
 
 let online = false;
+let onlineCount = 0;
 let onlineDate = null;
 let RTVon = false;
 let bytes = 0;
@@ -13,7 +14,17 @@ let uptime = ''; // string
 let disk = ''; // string
 
 module.exports.setStatus = function setStatus(status) {
-  online = status;
+  if (status) {
+    onlineCount++;
+  } else {
+    onlineCount--;
+  }
+  if(onlineCount > 0) {
+    online = true;
+  } else {
+    online = false;
+    if(onlineCount < 0) { onlineCount = 0; }
+  }
   onlineDate = dateformat(new Date(), 'yyyy-mm-dd HH:MM:ss');
 };
 
