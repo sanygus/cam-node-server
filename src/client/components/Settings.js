@@ -141,7 +141,7 @@ class Settings extends Component {
     return (
       <div>
         <div style={{textAlign: 'right', margin: '0px 30px -50px 0'}}>
-          <span style={{fontSize: '10pt'}}> { settings.RTV ? 'http://csolar.cloudapp.net:8555/unicast.m3u8 | rtsp://csolar.cloudapp.net:8555/unicast' : "\u00a0" }</span>
+          <span style={{fontSize: '10pt', marginRight: 50}}> { settings.RTV ? 'http://csolar.cloudapp.net:8555/unicast.m3u8 | rtsp://csolar.cloudapp.net:8555/unicast' : "\u00a0" }</span>
           <Toggle label="RealTime Video" toggled={settings.RTV} onToggle={this.toggleRealTimeVideo.bind(this)} disabled={false} />
         </div>
         <div style={{display: 'inline-block', margin: '30px', verticalAlign: 'top'}}>
