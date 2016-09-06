@@ -11,7 +11,7 @@ module.exports.fileSaver = function fileSaver(data) {
   fs.writeFile(path.resolve(options.filesDir, saveFileName), data.content, () => {
     log(`file ${saveFileName} saved`);
     if (/.+\.h264$/.test(saveFileName)) {
-      exec(
+      /*exec(
         `MP4Box -quiet -fps ${options.videoConvertFPS} -add ${saveFileName} ${data.filename.replace('.h264', '.mp4')}`,
         { cwd: path.resolve(options.filesDir), timeout: 5000 },
         (err, stout, sterr) => {
@@ -21,6 +21,52 @@ module.exports.fileSaver = function fileSaver(data) {
             log(`packing ${saveFileName} to ${data.filename.replace('.h264', '.mp4')} success`);
             fs.unlink(path.resolve(options.filesDir, saveFileName), () => {
               log(`original file ${saveFileName} deleted`);
+            });
+          }
+        }
+      );*/
+      exec(
+        `mp4mux --track h264:${saveFileName} ${saveFileName.replace('.h264', '.mp4')}`,
+        { cwd: path.resolve(options.filesDir), timeout: 5000 },
+        (err, stout, sterr) => {
+          if (err) {
+            log(`packing ${saveFileName} error, stout: '${stout}', sterr: '${sterr}'`);
+          } else {
+            log(`packing ${saveFileName} to ${saveFileName.replace('.h264', '.mp4')} success`);
+            fs.unlink(path.resolve(options.filesDir, saveFileName), () => {
+              log(`original file ${saveFileName} deleted`);
+
+              exec(
+                `mp4fragment ${saveFileName.replace('.h264', '.mp4')} ${saveFileName.replace('.h264', '.frag.mp4')}`,
+                { cwd: path.resolve(options.filesDir), timeout: 5000 },
+                (err, stout, sterr) => {
+                  if (err) {
+                    log(`fragmenting ${saveFileName.replace('.h264', '.mp4')} error, stout: '${stout}', sterr: '${sterr}'`);
+                  } else {
+                    log(`fragmenting ${saveFileName.replace('.h264', '.mp4')} to ${saveFileName.replace('.h264', '.frag.mp4')} success`);
+                    /*fs.unlink(path.resolve(options.filesDir, saveFileName.replace('.h264', '.mp4')), () => {
+                      log(`original file ${saveFileName.replace('.h264', '.mp4')} deleted`);*/
+                      
+                      exec(
+                       `mp4dash -f -o dash ${saveFileName.replace('.h264', '.frag.mp4')}`,
+                       { cwd: path.resolve(options.filesDir), timeout: 5000 },
+                        (err, stout, sterr) => {
+                          if (err) {
+                            log(`dash ${saveFileName.replace('.h264', '.frag.mp4')} error, stout: '${stout}', sterr: '${sterr}'`);
+                          } else {
+                            log(`dash success`);
+                            fs.unlink(path.resolve(options.filesDir, saveFileName.replace('.h264', '.frag.mp4')), () => {
+                              log(`original file ${saveFileName.replace('.h264', '.frag.mp4')} deleted`);
+                            });
+                          }
+                        }
+                      );
+
+                    //});
+                  }
+                }
+              );
+
             });
           }
         }

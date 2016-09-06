@@ -46,6 +46,15 @@ class FileViewer extends Component {
             >
               <source src={filesPath} type="video/mp4" />
             </video>
+        } else if (filesPath.indexOf('.mpd') > 0) {
+          content =
+            <video
+              id="dash-player"
+              controls
+              autoPlay
+              style={{width: 1280, height: 720}}
+            >
+            </video>
         }
       } else if (typeof filesPath === "object") { //playlist
         content =
@@ -61,6 +70,7 @@ class FileViewer extends Component {
           </video>
       }
     }    
+
 
     return(
       <Dialog

@@ -36,10 +36,10 @@ class Sensors extends Component {
               <List>
                 <ListItem primaryText={`CPU temp: ${sensors.cputemp} 'C`} />
                 <ListItem primaryText={`Voltage: ${sensors.voltage} V`} />
-                <ListItem primaryText={`Capacity: ${sensors.capacity} Ah`} />
+                <ListItem primaryText={`Capacity: ${sensors.capacity} Ah (${sensors.voltageBat} V)`} />
               </List>
             </div>
-            <div style={{position: 'absolute', top: '48px', left: '170px', width: '250px'}}>
+            <div style={{position: 'absolute', top: '48px', left: '220px', width: '250px'}}>
               <List>
                 <ListItem primaryText={`Amperage: ${sensors.amperage} A`} />
                 <ListItem primaryText={`Power: ${sensors.power} W`} />

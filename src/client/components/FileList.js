@@ -23,6 +23,10 @@ class FileList extends Component {
     this.setState({
       viewFiles: filesPath
     });
+    setTimeout(() => { //костыль
+      let player = dashjs.MediaPlayer().create();
+      player.initialize(document.querySelector("#dash-player"), filesPath);
+    }, 50);
   }
 
   viewAllVideo() {
@@ -44,7 +48,10 @@ class FileList extends Component {
       <List>
         <FileViewer filesPath={this.state.viewFiles} closeHandler={this.view.bind(this, null)} />
         <Subheader>FileList ({files.length})</Subheader>
-        <div><FlatButton label="View all videos" onMouseUp={this.viewAllVideo.bind(this)} /></div>
+        <div>
+          <div style={{display: 'inline-block'}}><FlatButton label="View DASH" onMouseUp={this.view.bind(this, '/files/dash/stream.mpd')} /></div>
+          <div style={{display: 'inline-block'}}><FlatButton label="View all videos" onMouseUp={this.viewAllVideo.bind(this)} /></div>
+        </div>
         {
           files.map( (value, key) => {
             const avatar = (value.name.indexOf('.mp4') > 0) ? <Avatar icon={<PlayIcon />} /> : <Avatar src={`/files/${value.name}`} />;

@@ -12,6 +12,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve(process.cwd(), 'views'));
 
 app.get('/', (request, response) => {
+  //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
   response.render('index.ejs');
 });
 
