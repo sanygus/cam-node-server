@@ -23,10 +23,12 @@ class FileList extends Component {
     this.setState({
       viewFiles: filesPath
     });
-    setTimeout(() => { //костыль
-      let player = dashjs.MediaPlayer().create();
-      player.initialize(document.querySelector("#dash-player"), filesPath);
-    }, 50);
+    if ((filesPath !== null) && (filesPath.indexOf('.mpd') > 0)) { //костыль
+      setTimeout(() => {
+        let player = dashjs.MediaPlayer().create();
+        player.initialize(document.querySelector("#dash-player"), filesPath);
+      }, 50);
+    }
   }
 
   viewAllVideo() {
